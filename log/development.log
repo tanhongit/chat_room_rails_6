@@ -224,3 +224,18 @@ Entrypoint application = js/application-9afcbb5693aa87623e69.js js/application-9
 Completed 200 OK in 4170ms (Views: 4161.9ms | ActiveRecord: 0.0ms | Allocations: 22462)
 
 
+Started GET "/" for ::1 at 2020-07-09 18:21:37 +0700
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+Processing by RoomsController#index as HTML
+Completed 401 Unauthorized in 5ms (ActiveRecord: 0.0ms | Allocations: 1534)
+
+
+Started GET "/users/sign_in" for ::1 at 2020-07-09 18:21:37 +0700
+Processing by Devise::SessionsController#new as HTML
+  Rendering devise/sessions/new.html.erb within layouts/application
+  Rendered devise/shared/_links.html.erb (Duration: 1.3ms | Allocations: 597)
+  Rendered devise/sessions/new.html.erb within layouts/application (Duration: 10.7ms | Allocations: 3244)
+[Webpacker] Everything's up-to-date. Nothing to do
+Completed 200 OK in 29ms (Views: 16.4ms | ActiveRecord: 0.8ms | Allocations: 13803)
+
+
