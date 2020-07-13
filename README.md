@@ -1,24 +1,11 @@
-# README
+# Welcome to Chat Rooms Rails 6 by TANHONGIT
+Complete the chat room application implementation using Ruby on Rails 6 and WebSockets.
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+# What are WebSockets
+WebSocket is actually a protocol that enables bidirectional communication between the client and the server of a web application over a single long living TCP connection.
 
-Things you may want to cover:
+# Building the application
+We are going to build the web application using:
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Ruby: version ruby 2.7.1
+Rails: version 6.0.3.2
