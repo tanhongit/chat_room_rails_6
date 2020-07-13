@@ -1,0 +1,2765 @@
+<!DOCTYPE html>
+<!-- saved from url=(0086)https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="ocs-site-verification" content="e5faa08e01247c38aadf1c1737ff8136">
+  <meta name="google-site-verification" content="KqOxy0ecDlfNdfO530ZAbtNBedy49hn2KziyqLK0JGo">
+
+  <title>Creating a chat application from scratch using Rails and WebSockets</title>
+
+  <link href="./Creating a chat application from scratch using Rails and WebSockets_files/css" rel="stylesheet">
+
+  <link rel="icon" href="https://iridakos.com/assets/images/favicon.ico?v=4" type="image/x-icon">
+  <link rel="stylesheet" href="./Creating a chat application from scratch using Rails and WebSockets_files/main.css">
+  <link rel="stylesheet" href="./Creating a chat application from scratch using Rails and WebSockets_files/font-awesome.min.css">
+  <link rel="alternate" type="application/rss+xml" title="iridakos" href="https://iridakos.com/feed.xml">
+  <!-- Begin Jekyll SEO tag v2.6.1 -->
+<meta name="generator" content="Jekyll v3.8.6">
+<meta property="og:title" content="Creating a chat application from scratch using Rails and WebSockets">
+<meta name="author" content="Lazarus Lazaridis">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="A step by step tutorial for creating a chat application from scratch using Rails and WebSockets (ActionCable).">
+<meta property="og:description" content="A step by step tutorial for creating a chat application from scratch using Rails and WebSockets (ActionCable).">
+<link rel="canonical" href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets">
+<meta property="og:url" content="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets">
+<meta property="og:site_name" content="iridakos">
+<meta property="og:image" content="https://iridakos.com/assets/images/posts/rails-chat-tutorial/post.png">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2019-04-04T23:00:00+03:00">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="twitter:image" content="https://iridakos.com/assets/images/posts/rails-chat-tutorial/post.png">
+<meta property="twitter:title" content="Creating a chat application from scratch using Rails and WebSockets">
+<meta name="twitter:site" content="@lazaru_s">
+<meta name="twitter:creator" content="@Lazarus Lazaridis">
+<script type="application/ld+json">
+{"mainEntityOfPage":{"@type":"WebPage","@id":"https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets"},"author":{"@type":"Person","name":"Lazarus Lazaridis"},"description":"A step by step tutorial for creating a chat application from scratch using Rails and WebSockets (ActionCable).","@type":"BlogPosting","headline":"Creating a chat application from scratch using Rails and WebSockets","dateModified":"2019-04-04T23:00:00+03:00","datePublished":"2019-04-04T23:00:00+03:00","image":"https://iridakos.com/assets/images/posts/rails-chat-tutorial/post.png","url":"https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://iridakos.com/assets/images/site.png"},"name":"Lazarus Lazaridis"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+  <body data-gr-c-s-loaded="true">
+    <div class="header-container">
+
+  <nav class="navbar navbar-expand-lg navbar-light iridakos-navbar">
+    <div class="container-fluid no-gutters">
+      
+
+      <a class="mr-3 blog-logo-container" href="https://iridakos.com/" alt="home">
+        <img class="blog-logo" src="./Creating a chat application from scratch using Rails and WebSockets_files/irida-faded.png">
+      </a>
+
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#header-pages" aria-controls="header-pages" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="header-pages">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+          
+
+          <li class="nav-item dropdown active">
+            <a class="nav-link dropdown-toggle" href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              programming
+            </a>
+
+            <div class="dropdown-menu" aria-labelledby="more">
+              <a class="dropdown-item" href="https://iridakos.com/programming/">all posts</a>
+              <a class="dropdown-item" href="https://iridakos.com/programming/featured/">featured posts</a>
+              <a class="dropdown-item" href="https://iridakos.com/programming/tutorials/">tutorials</a>
+              <a class="dropdown-item" href="https://iridakos.com/programming/how-to/">how to</a>
+              <a class="dropdown-item" href="https://iridakos.com/programming/code/">code</a>
+              <hr class="dropdown-divider">
+              <a class="dropdown-item" href="https://iridakos.com/programming/humor/">humor</a>
+            </div>
+          </li>
+
+          
+
+          <li class="nav-item ">
+              <a class="nav-link" href="https://iridakos.com/cats/" alt="cats">cats</a>
+          </li>
+
+          
+
+          <li class="nav-item ">
+              <a class="nav-link" href="https://iridakos.com/painting/" alt="painting">painting</a>
+          </li>
+
+          
+
+          <li class="nav-item ">
+              <a class="nav-link" href="https://iridakos.com/tags/" alt="tags">tags</a>
+          </li>
+
+          
+
+          <li class="nav-item ">
+              <a class="nav-link" href="https://iridakos.com/about/" alt="about">about me</a>
+          </li>
+        </ul>
+
+        <ul class="navbar-nav mr-0 mt-2 mt-lg-0">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fa fa-language"></i>
+              English
+            </a>
+
+            <div class="dropdown-menu" aria-labelledby="more">
+              
+              <a class="dropdown-item" href="https://iridakos.com/el/programming/2019/11/19/creating-chat-application-rails-websockets">Ελληνικά</a>
+            </div>
+          </li>
+        </ul>
+
+        <form class="form-inline my-2 my-lg-0" method="get" action="https://iridakos.com/search">
+          <div class="input-group input-group-sm mr-sm-2">
+            <input class="form-control" name="query" type="search" placeholder="Search the blog">
+
+            <div class="input-group-append">
+              <button class="btn btn-warning" type="submit">
+                <i class="fa fa-search"></i>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-title-container">
+    <div class="container-fluid no-gutters">
+      <div class="page-title">
+        <div class="row align-items-center">
+          <div class="col-xs-12 col-md-8 col-lg-9 order-md-first order-last text-center text-md-left">
+            <h1>Creating a chat application from scratch using Rails and WebSockets</h1>
+
+              <div class="page-subtitle">
+              A step by step tutorial for creating a chat application from scratch using Rails and WebSockets (ActionCable).
+
+              
+                <div class="post">
+                  <div class="post-metadata">
+                    <div class="post-date" title="published on">
+                      Published on <span class="important">Apr 4, 2019</span>
+                    </div>
+
+                    <div class="post-category" title="in category">
+                      in category <span class="important">programming</span>
+                    </div>
+                  </div>
+
+                  
+                  
+                    <div class="post-tags">
+                      <span class="important">tags:</span>
+                      
+                        <a href="https://iridakos.com/tags/?tag=ruby">ruby</a> - 
+                      
+                        <a href="https://iridakos.com/tags/?tag=rails">rails</a> - 
+                      
+                        <a href="https://iridakos.com/tags/?tag=websockets">websockets</a> - 
+                      
+                        <a href="https://iridakos.com/tags/?tag=devise">devise</a> - 
+                      
+                        <a href="https://iridakos.com/tags/?tag=bootstrap">bootstrap</a> - 
+                      
+                        <a href="https://iridakos.com/tags/?tag=chat">chat</a> - 
+                      
+                        <a href="https://iridakos.com/tags/?tag=actioncable">actioncable</a> - 
+                      
+                        <a href="https://iridakos.com/tags/?tag=redis">redis</a> - 
+                      
+                        <a href="https://iridakos.com/tags/?tag=featured">featured</a> - 
+                      
+                        <a href="https://iridakos.com/tags/?tag=tutorial">tutorial</a>
+                      
+                    </div>
+                  
+
+                  
+                  
+                  
+                    <!--googleoff: index-->
+                    <div class="my-3">
+                      <small>
+                        Αυτό το άρθρο είναι διαθέσιμο και στα <a href="https://iridakos.com/el/programming/2019/11/19/creating-chat-application-rails-websockets">ελληνικά</a>.
+                      </small>
+                    </div>
+                    <!--googleon: index-->
+                  
+                </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="header-separator"></div>
+</div>
+
+
+<!--googleoff: index-->
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="alert alert-success announcements mt-1">
+        <div class="row align-items-center">
+          <div class="col-auto pr-0">
+            <strong><i class="fa fa-linux text-200 mr-2"></i></strong>
+          </div>
+
+          <div class="col pl-1">
+            I just released <a href="https://github.com/iridakos/stup" target="_blank"><strong>stup</strong></a>, a tool for easily keeping organized <strong>daily notes in the terminal</strong>.
+
+            You can find it on <i class="fa fa-github"></i> GitHub <a href="https://github.com/iridakos/stup" target="_blank">here</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--googleon: index-->
+
+
+
+
+    <div class="container-fluid no-gutters">
+      <div class="row">
+        <div class="col-xs-12 col-md-8 col-lg-9 page-content">
+          
+            <div class="row">
+              <div class="col-12">
+                <div class="outline mb-3">
+                  <p>Hey! It’s been a while since my last post.</p>
+
+<p>I recently familiarized myself with the awesomeness of WebSockets and I finally found the time to write a tutorial about it. I hope you find it helpful.</p>
+
+<p><strong>Update</strong>: I also published another post for <a href="https://twitter.com/lazaru_s/status/1182193506430984193">dockerizing the application</a>  of this tutorial, you can find it <a href="https://iridakos.com/programming/2019/04/07/dockerizing-a-rails-application"><strong>here</strong></a>.</p>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>In this tutorial we are going to create a <strong>chat</strong> web application from scratch using Rails and WebSockets.</p>
+
+<p><img src="./Creating a chat application from scratch using Rails and WebSockets_files/rails-chat-tutorial.gif" alt="Rails chat tutorial gif"></p>
+
+<div class="alert alert-light">
+  <div class="alert-heading"><i class="fa fa-comments"></i> Code and comments</div>
+
+  You can find the code of this tutorial on <a class="alert-link" href="https://github.com/iridakos/rails-chat-tutorial"><i class="fa fa-github"></i> GitHub</a>.
+
+  <hr>
+
+  For feedback, comments, typos etc. please open an <a class="alert-link" href="https://github.com/iridakos/rails-chat-tutorial/issues">issue</a> in the repository.
+</div>
+
+<h3 id="what-are-websockets">What are WebSockets</h3>
+
+<p>WebSocket is actually a protocol that enables bidirectional communication between the client and the server of a web application over a single long living TCP connection.</p>
+
+<blockquote>
+  <p>The WebSocket protocol enables interaction between a web browser (or other client application) and a web server <strong>with lower overheads, facilitating real-time data transfer from and to the server</strong>.
+<br><br>This is made possible by providing a standardized way for the server to send content to the client without being first requested by the client, and allowing messages to be passed back and forth while keeping the connection open. In this way, a two-way ongoing conversation can take place between the client and the server.<br><br>The communications are done over TCP port number 80 (or 443 in the case of TLS-encrypted connections), which is of benefit for those environments which block non-web Internet connections using a firewall. Similar two-way browser-server communications have been achieved in non-standardized ways using stopgap technologies such as Comet.
+<cite>– <a href="https://en.wikipedia.org/wiki/WebSocket">WebSocket @ Wikipedia</a></cite></p>
+</blockquote>
+
+<h3 id="why-websockets">Why WebSockets</h3>
+
+<p>Suppose you have to create a web page that shows the statuses of running processes.
+Without WebSockets you would have to either:</p>
+<ul>
+  <li>Use AJAX with Javascript intervals to request and render the latest state of the processes or</li>
+  <li>Automatically reload the page every x seconds (<code class="highlighter-rouge">&lt;meta http-equiv="refresh" content="x"&gt;</code>) or</li>
+  <li>Add a message on the page <em>“The statuses are not updated automatically <span class="text-nowrap">¯\_(ツ)_/¯</span> Press <a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets">here</a> to reload the page.”</em></li>
+</ul>
+
+<p>All of these methods would request the process statuses from the server even if nothing has changed.</p>
+
+<p>WebSockets are here to allow this communication to take place on demand. The cost is having to keep alive TCP connections between the server and all its clients (each for every open browser tab).</p>
+
+<h2 id="building-the-application">Building the application</h2>
+
+<p>We are going to build the web application using:</p>
+
+<ul>
+  <li><strong>Ruby</strong>: version <strong>2.6.2</strong></li>
+  <li><strong>Rails</strong>: version <strong>5.2.3</strong></li>
+</ul>
+
+<h3 id="setting-up-the-environment">Setting up the environment</h3>
+
+<p>We are going to install the proper ruby and rails versions.</p>
+
+<h4 id="install-ruby">Install ruby</h4>
+
+<p>I use <a href="https://rvm.io/">rvm</a> to manage the <strong>Ruby</strong> versions installed on my system. To install the desired ruby version use:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rvm <span class="nb">install </span>ruby 2.6.2
+</code></pre></div></div>
+
+<h4 id="install-rails">Install rails</h4>
+
+<p>Create a directory in your system with the name <code class="highlighter-rouge">rails-chat-tutorial</code>.</p>
+
+<p><strong>Navigate to that directory</strong> and create the following two files:</p>
+
+<p><em>.ruby-version</em></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ruby-2.6.2
+</code></pre></div></div>
+
+<p><em>.ruby-gemset</em></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rails-chat-tutorial
+</code></pre></div></div>
+
+<p>With these file we are letting <em>rvm</em> know that when working on this directory, we want to use the specific ruby version (<code class="highlighter-rouge">.ruby-version</code>) and the gems from the specific gemset (<code class="highlighter-rouge">.ruby-gemset</code>)</p>
+
+<p>Now, re-entering in the directory you should see something like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ cd .
+
+ruby-2.6.2 - #gemset created /home/iridakos/.rvm/gems/ruby-2.6.2@rails-chat-tutorial
+ruby-2.6.2 - #generating rails-chat-tutorial wrappers...........
+</code></pre></div></div>
+
+<p>Install the desired rails version with:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gem install rails -v 5.2.3
+</code></pre></div></div>
+
+<h4 id="create-the-rails-application">Create the rails application</h4>
+
+<p>We are ready to create our new <em>rails</em> application:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rails new .
+</code></pre></div></div>
+
+<p><strong>Note</strong>: We didn’t define a name for the application and rails will resolve it using the directory name: <code class="highlighter-rouge">rails-chat-tutorial</code>.</p>
+
+<p>Rails will create all the application’s files and install the required gems.</p>
+
+<p>Let’s start the application to make sure that everything is fine.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rails server
+</code></pre></div></div>
+
+<p>You should see something like:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>=&gt; Booting Puma
+=&gt; Rails 5.2.3 application starting in development
+=&gt; Run `rails server -h` for more startup options
+Puma starting in single mode...
+* Version 3.12.1 (ruby 2.6.2-p47), codename: Llamas in Pajamas
+* Min threads: 5, max threads: 5
+* Environment: development
+* Listening on tcp://localhost:3000
+Use Ctrl-C to stop
+</code></pre></div></div>
+
+<p>Open a browser and visit <code class="highlighter-rouge">http://localhost:3000</code>, if you see this we are good to go.</p>
+
+<p><img src="./Creating a chat application from scratch using Rails and WebSockets_files/01-rails-new.png" alt="Rails new application"></p>
+
+<h3 id="users-and-devise">Users and devise</h3>
+
+<p>We are going to use the awesome <a href="https://github.com/plataformatec/devise">devise</a> solution for authentication.</p>
+
+<p>Append the following gem requirement at the bottom of the <code class="highlighter-rouge">Gemfile</code> file located at the root of the application’s directory.</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">gem</span> <span class="s1">'devise'</span>
+</code></pre></div></div>
+
+<p>On your terminal, install the new gem by executing:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bundle
+</code></pre></div></div>
+
+<p>Finish integration with devise using:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rails generate devise:install
+</code></pre></div></div>
+
+<p>We will create the model representing our users using the devise generators.</p>
+
+<p>On your terminal, execute:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rails generate devise User username:string
+</code></pre></div></div>
+
+<p><strong>Note</strong>: we have added an extra attribute <code class="highlighter-rouge">username</code> to our model (besides the defaults generated by devise) so that we have something more friendly to present when displaying users instead of their email.</p>
+
+<p>Open the generated migration which you will find under <code class="highlighter-rouge">db/migrate/&lt;datetime&gt;_devise_create_users.rb</code> and append the username’s unique index definition with<sup><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#acknowledgments">[4]</a></sup>:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="n">add_index</span> <span class="ss">:users</span><span class="p">,</span>  <span class="ss">:username</span><span class="p">,</span>             <span class="ss">unique: </span><span class="kp">true</span>
+</code></pre></div></div>
+
+<p>Find the line in the file that defines the <code class="highlighter-rouge">username</code> column and change it to:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">t</span><span class="p">.</span><span class="nf">string</span> <span class="ss">:username</span><span class="p">,</span> <span class="ss">null: </span><span class="kp">false</span>
+</code></pre></div></div>
+
+<p>to make the attribute required.</p>
+
+<p>Then in the User model which is located at <code class="highlighter-rouge">app/models/user.rb</code> add the validation rule for uniqueness and presence:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="n">validates</span> <span class="ss">:username</span><span class="p">,</span> <span class="ss">uniqueness: </span><span class="kp">true</span><span class="p">,</span> <span class="ss">presence: </span><span class="kp">true</span>
+</code></pre></div></div>
+
+<p>Finally, apply the database migration using:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rails db:migrate
+</code></pre></div></div>
+
+<h3 id="rooms-and-messages">Rooms and messages</h3>
+
+<p>Each chat message is going to take place in the context of a room.</p>
+
+<p>Let’s build them all.</p>
+
+<p>Use the following command to create the <code class="highlighter-rouge">Room</code>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rails generate resource Room name:string:uniq
+</code></pre></div></div>
+
+<p>and the following command to create the <code class="highlighter-rouge">RoomMessage</code>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rails generate resource RoomMessage room:references user:references message:text
+</code></pre></div></div>
+
+<p>We are now going to define the appropriate relations<sup><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#acknowledgments">[7]</a></sup>.</p>
+
+<p>Open <code class="highlighter-rouge">app/models/room.rb</code> and add the relation inside the class:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">has_many</span> <span class="ss">:room_messages</span><span class="p">,</span> <span class="ss">dependent: :destroy</span><span class="p">,</span>
+                         <span class="ss">inverse_of: :room</span>
+</code></pre></div></div>
+
+<p>Open <code class="highlighter-rouge">app/models/room_message.rb</code> and add the relations inside the class:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">belongs_to</span> <span class="ss">:user</span>
+<span class="n">belongs_to</span> <span class="ss">:room</span><span class="p">,</span> <span class="ss">inverse_of: :room_messages</span>
+</code></pre></div></div>
+
+<p>Migrate the database with:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rails db:migrate
+</code></pre></div></div>
+
+<p>We can now setup our routes so that the root request is served by the <code class="highlighter-rouge">RoomsController#index</code> action.</p>
+
+<p>Open your <code class="highlighter-rouge">config/routes.rb</code> file and change its contents to:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="no">Rails</span><span class="p">.</span><span class="nf">application</span><span class="p">.</span><span class="nf">routes</span><span class="p">.</span><span class="nf">draw</span> <span class="k">do</span>
+  <span class="n">devise_for</span> <span class="ss">:users</span>
+
+  <span class="n">root</span> <span class="ss">controller: :rooms</span><span class="p">,</span> <span class="ss">action: :index</span>
+
+  <span class="n">resources</span> <span class="ss">:room_messages</span>
+  <span class="n">resources</span> <span class="ss">:rooms</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>Restart the server and try to navigate to the application’s root url.</p>
+
+<p>You should see an error message, no worries:</p>
+
+<p><img src="./Creating a chat application from scratch using Rails and WebSockets_files/02.png" alt="No action index for the RoomsController"></p>
+
+<p>We have to create the <code class="highlighter-rouge">index</code> action in the <code class="highlighter-rouge">RoomsController</code>. Open the controller <code class="highlighter-rouge">app/controllers/rooms_controller.rb</code> and change its contents to the following:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">RoomsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+  <span class="k">def</span> <span class="nf">index</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>Then create the file <code class="highlighter-rouge">app/views/rooms/index.html.erb</code> and for now just add the following:</p>
+<div class="language-erb highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;h1&gt;</span>Rooms index<span class="nt">&lt;/h1&gt;</span>
+</code></pre></div></div>
+
+<p>Reload and voilà.</p>
+
+<p><img src="./Creating a chat application from scratch using Rails and WebSockets_files/03.png" alt="Rooms index"></p>
+
+<h3 id="adding-authentication">Adding authentication</h3>
+
+<p>We want all users to be authenticated before start chatting, so we are going to add the following line in the <code class="highlighter-rouge">ApplicationController</code> located at <em>app/controllers/application_controller.rb</em>:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="n">before_action</span> <span class="ss">:authenticate_user!</span>
+</code></pre></div></div>
+
+<p>If we navigate to <code class="highlighter-rouge">http://localhost:3000</code> now we should be redirected to the sign in page <sup><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#acknowledgments">[10]</a></sup>.</p>
+
+<p><img src="./Creating a chat application from scratch using Rails and WebSockets_files/04.png" alt="Sign in"></p>
+
+<p>Before continuing with the good stuff, let’s gear up the application with some good features.</p>
+
+<h3 id="add-bootstrap">Add bootstrap</h3>
+
+<p>We are going to use <a href="https://getbootstrap.com/">Bootstrap</a> and we will integrate it in the application using the <a href="https://github.com/twbs/bootstrap-rubygem">bootstrap-rubygem</a> gem.</p>
+
+<p>Following the instructions of the gem, append the dependencies in your <code class="highlighter-rouge">Gemfile</code>.</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">gem</span> <span class="s1">'bootstrap'</span><span class="p">,</span> <span class="s1">'~&gt; 4.3.1'</span>
+<span class="n">gem</span> <span class="s1">'jquery-rails'</span>
+</code></pre></div></div>
+<p>and execute <code class="highlighter-rouge">bundle</code> to fetch and install it.</p>
+
+<p>Change the <code class="highlighter-rouge">app/assets/stylesheets/application.css</code> file’s extension to <code class="highlighter-rouge">scss</code> and <strong>replace its contents</strong> with:</p>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">@import</span> <span class="s1">"bootstrap"</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Add the following lines to the <code class="highlighter-rouge">app/assets/javascript/application.js</code> just before the <code class="highlighter-rouge">//= require_tree .</code> line<sup><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#acknowledgments">[9]</a></sup>:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//= require jquery3</span>
+<span class="c1">//= require popper</span>
+<span class="c1">//= require bootstrap-sprockets</span>
+</code></pre></div></div>
+
+<h3 id="add-simple_form">Add simple_form</h3>
+
+<p>We are going to use this great gem to generate forms easily.</p>
+
+<p>Append the gem dependency in your <code class="highlighter-rouge">Gemfile</code> and bundle to install it.</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">gem</span> <span class="s1">'simple_form'</span>
+</code></pre></div></div>
+
+<p>Then complete the integration using:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rails generate simple_form:install <span class="nt">--bootstrap</span>
+</code></pre></div></div>
+
+<p><strong>Note</strong>: We used the <em>–bootstrap</em> directive since that’s the framework we are using.</p>
+
+<h3 id="devise-views-with-bootstrap-and-simple-form">Devise views with bootstrap and simple form</h3>
+
+<p>Devise uses its own views for sign in, register etc. But we do have a way to customize these views and now that we have ended up using bootstrap and simple forms, we can generate these views in a way that our choices are respected.</p>
+
+<p>In your terminal:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rails generate devise:views
+</code></pre></div></div>
+
+<p>The view for signing in is under <code class="highlighter-rouge">app/views/devise/sessions/new.html.erb</code> and for signing up is under <code class="highlighter-rouge">app/views/devise/registrations/new.html.erb</code>. Open these two files and change the submit button’s class by replacing the following line<sup><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#acknowledgments">[6]</a></sup>:</p>
+
+<div class="language-erb highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;%=</span> <span class="n">f</span><span class="p">.</span><span class="nf">button</span> <span class="ss">:submit</span><span class="p">,</span> <span class="s2">"Sign up"</span> <span class="cp">%&gt;</span>
+</code></pre></div></div>
+
+<p>with</p>
+
+<div class="language-erb highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;%=</span> <span class="n">f</span><span class="p">.</span><span class="nf">button</span> <span class="ss">:submit</span><span class="p">,</span> <span class="s2">"Sign up"</span><span class="p">,</span> <span class="ss">class: </span><span class="s1">'btn btn-success'</span> <span class="cp">%&gt;</span>
+</code></pre></div></div>
+
+<p>to render the buttons <em>bootstrap style</em>.</p>
+
+<p>Before viewing our changes, let’s do one last thing in our default layout.</p>
+
+<p>Open <code class="highlighter-rouge">app/views/layouts/application.html.erb</code> and replace its contents with:</p>
+
+<div class="language-erb highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+  <span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;title&gt;</span>RailsChatTutorial<span class="nt">&lt;/title&gt;</span>
+    <span class="cp">&lt;%=</span> <span class="n">csrf_meta_tags</span> <span class="cp">%&gt;</span>
+    <span class="cp">&lt;%=</span> <span class="n">csp_meta_tag</span> <span class="cp">%&gt;</span>
+
+    <span class="cp">&lt;%=</span> <span class="n">stylesheet_link_tag</span>    <span class="s1">'application'</span><span class="p">,</span> <span class="ss">media: </span><span class="s1">'all'</span><span class="p">,</span> <span class="s1">'data-turbolinks-track'</span><span class="p">:</span> <span class="s1">'reload'</span> <span class="cp">%&gt;</span>
+    <span class="cp">&lt;%=</span> <span class="n">javascript_include_tag</span> <span class="s1">'application'</span><span class="p">,</span> <span class="s1">'data-turbolinks-track'</span><span class="p">:</span> <span class="s1">'reload'</span> <span class="cp">%&gt;</span>
+  <span class="nt">&lt;/head&gt;</span>
+
+  <span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"container"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"row"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"col-12"</span><span class="nt">&gt;</span>
+          <span class="cp">&lt;%=</span> <span class="k">yield</span> <span class="cp">%&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+      <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p>This last one was to use <a href="https://getbootstrap.com/docs/4.0/layout/grid/">Bootstrap’s grid</a> in our views.</p>
+
+<p>Navigate to <code class="highlighter-rouge">http://localhost:3000</code> and view what we have created.</p>
+
+<p><img src="./Creating a chat application from scratch using Rails and WebSockets_files/05.png" alt="Sign in with Devise and simple form"></p>
+
+<p>Let’s try to sign up following the <code class="highlighter-rouge">Sign up</code> link of the form:</p>
+
+<p><img src="./Creating a chat application from scratch using Rails and WebSockets_files/06.png" alt="Sign up without username"></p>
+
+<p>As you can see, there is no field to fill in the username. For that to work we have to:</p>
+
+<ul>
+  <li>Add the field in the sign up form</li>
+  <li>Configure devise to accept the new attribute (<code class="highlighter-rouge">username</code>) or else the <code class="highlighter-rouge">ApplicationController</code> will <a href="https://api.rubyonrails.org/classes/ActionController/Parameters.html">ignore it</a> once submitted from the form.</li>
+</ul>
+
+<p>To add the field in the sign up form, open <code class="highlighter-rouge">app/views/devise/registrations/new.html.erb</code> and add these lines between the email and password fields.</p>
+
+<div class="language-erb highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="cp">&lt;%=</span> <span class="n">f</span><span class="p">.</span><span class="nf">input</span> <span class="ss">:username</span><span class="p">,</span>
+              <span class="ss">required: </span><span class="kp">true</span> <span class="cp">%&gt;</span>
+</code></pre></div></div>
+
+<p>Then, open the <code class="highlighter-rouge">app/controllers/application_controller.rb</code> file to configure the new attribute. Change the contents to:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ApplicationController</span> <span class="o">&lt;</span> <span class="no">ActionController</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">before_action</span> <span class="ss">:authenticate_user!</span>
+
+  <span class="n">before_action</span> <span class="ss">:configure_permitted_parameters</span><span class="p">,</span> <span class="ss">if: :devise_controller?</span>
+
+  <span class="kp">protected</span>
+
+  <span class="k">def</span> <span class="nf">configure_permitted_parameters</span>
+    <span class="n">devise_parameter_sanitizer</span><span class="p">.</span><span class="nf">permit</span><span class="p">(</span><span class="ss">:sign_up</span><span class="p">,</span> <span class="ss">keys: </span><span class="p">[</span><span class="ss">:email</span><span class="p">,</span> <span class="ss">:username</span><span class="p">])</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>Done, reload and sign up<sup><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#acknowledgments">[5]</a></sup>.</p>
+
+<p><img src="./Creating a chat application from scratch using Rails and WebSockets_files/07.png" alt="Sign up with username"></p>
+
+<h3 id="cleanup-unused-components">Cleanup unused components</h3>
+
+<p>We will not be using <code class="highlighter-rouge">coffee script</code> or <code class="highlighter-rouge">turbolinks</code> so let’s remove all the related stuff.</p>
+
+<p>Open <code class="highlighter-rouge">Gemfile</code> and remove the following lines:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Use CoffeeScript for .coffee assets and views</span>
+<span class="n">gem</span> <span class="s1">'coffee-rails'</span><span class="p">,</span> <span class="s1">'~&gt; 4.2'</span>
+<span class="c1"># Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks</span>
+<span class="n">gem</span> <span class="s1">'turbolinks'</span><span class="p">,</span> <span class="s1">'~&gt; 5'</span>
+</code></pre></div></div>
+
+<p>Open <code class="highlighter-rouge">app/assets/javascripts/application.js</code> and remove the following line:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//= require turbolinks</span>
+</code></pre></div></div>
+
+<p>Open <code class="highlighter-rouge">app/views/layouts/application.html.erb</code> and change the following lines <sup><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#acknowledgments">[3]</a></sup>:</p>
+
+<div class="language-erb highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cp">&lt;%=</span> <span class="n">stylesheet_link_tag</span>    <span class="s1">'application'</span><span class="p">,</span> <span class="ss">media: </span><span class="s1">'all'</span><span class="p">,</span> <span class="s1">'data-turbolinks-track'</span><span class="p">:</span> <span class="s1">'reload'</span> <span class="cp">%&gt;</span>
+    <span class="cp">&lt;%=</span> <span class="n">javascript_include_tag</span> <span class="s1">'application'</span><span class="p">,</span> <span class="s1">'data-turbolinks-track'</span><span class="p">:</span> <span class="s1">'reload'</span> <span class="cp">%&gt;</span>
+</code></pre></div></div>
+
+<p>to</p>
+
+<div class="language-erb highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cp">&lt;%=</span> <span class="n">stylesheet_link_tag</span>    <span class="s1">'application'</span><span class="p">,</span> <span class="ss">media: </span><span class="s1">'all'</span> <span class="cp">%&gt;</span>
+    <span class="cp">&lt;%=</span> <span class="n">javascript_include_tag</span> <span class="s1">'application'</span> <span class="cp">%&gt;</span>
+</code></pre></div></div>
+
+<p>Check that your <code class="highlighter-rouge">app/assets/javascripts</code> folder doesn’t have any files with extension <code class="highlighter-rouge">.coffee</code> and if you find any, remove them.<sup><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#acknowledgments">2</a><sup></sup></sup></p>
+
+<p>In the terminal, also execute the following command:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rails tmp:cache:clear
+</code></pre></div></div>
+
+<p>to clear any cached compiled coffee scripts.</p>
+
+<p>Done. Restart you server.</p>
+
+<h3 id="adding-a-navigation-bar">Adding a navigation bar</h3>
+
+<p>To improve the usability of the web pages will add a top <a href="https://getbootstrap.com/docs/4.0/components/navbar/">navigation bar</a>.</p>
+
+<p>Create the directory <code class="highlighter-rouge">app/views/shared</code> and a file inside it named <code class="highlighter-rouge">_navigation_bar.html.erb</code>. This is going to be the partial responsible for rendering the navigation bar and which later on we will add to the application’s default layout in order to be rendered on all web pages. Add these contents:</p>
+
+<div class="language-erb highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;nav</span> <span class="na">class=</span><span class="s">"navbar navbar-expand-lg navbar-dark bg-dark justify-content-between"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">"navbar-brand"</span> <span class="na">href=</span><span class="s">"#"</span><span class="nt">&gt;</span>Rails chat tutorial<span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">"navbar-toggler"</span> <span class="na">type=</span><span class="s">"button"</span> <span class="na">data-toggle=</span><span class="s">"collapse"</span> <span class="na">data-target=</span><span class="s">"#nav-bar-collapse"</span> <span class="na">aria-controls=</span><span class="s">"navbarColor01"</span> <span class="na">aria-expanded=</span><span class="s">"false"</span> <span class="na">aria-label=</span><span class="s">"Toggle navigation"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"navbar-toggler-icon"</span><span class="nt">&gt;&lt;/span&gt;</span>
+  <span class="nt">&lt;/button&gt;</span>
+
+  <span class="cp">&lt;%</span> <span class="k">if</span> <span class="n">current_user</span> <span class="cp">%&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"dropdown"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">"nav-link dropdown-toggle"</span> <span class="na">href=</span><span class="s">"#"</span> <span class="na">id=</span><span class="s">"navbarDropdown"</span> <span class="na">role=</span><span class="s">"button"</span> <span class="na">data-toggle=</span><span class="s">"dropdown"</span> <span class="na">aria-haspopup=</span><span class="s">"true"</span> <span class="na">aria-expanded=</span><span class="s">"false"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;img</span> <span class="na">class=</span><span class="s">"avatar"</span> <span class="na">src=</span><span class="s">"</span><span class="cp">&lt;%=</span> <span class="n">gravatar_url</span><span class="p">(</span><span class="n">current_user</span><span class="p">)</span> <span class="cp">%&gt;</span><span class="s">"</span><span class="nt">&gt;</span>
+        <span class="cp">&lt;%=</span> <span class="n">current_user</span><span class="p">.</span><span class="nf">username</span> <span class="cp">%&gt;</span>
+      <span class="nt">&lt;/a&gt;</span>
+
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"dropdown-menu dropdown-menu-right"</span> <span class="na">aria-labelledby=</span><span class="s">"navbarDropdown"</span><span class="nt">&gt;</span>
+        <span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="s1">'Logout'</span><span class="p">,</span> <span class="n">destroy_user_session_path</span><span class="p">,</span> <span class="ss">method: :delete</span><span class="p">,</span> <span class="ss">class: </span><span class="s1">'dropdown-item'</span> <span class="cp">%&gt;</span>
+      <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+  <span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span>
+<span class="nt">&lt;/nav&gt;</span>
+</code></pre></div></div>
+
+<p>Mind the <code class="highlighter-rouge">gravatar_url(current_user)</code> line. This is a helper method that we are going to use in order to resolve the gravatar url of the signed in user. This is not a builtin method, we have to defined it but it’s pretty straightforward.</p>
+
+<p>Edit <code class="highlighter-rouge">app/helpers/application_helper.rb</code> and add the following method:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">gravatar_url</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+  <span class="n">gravatar_id</span> <span class="o">=</span> <span class="no">Digest</span><span class="o">::</span><span class="no">MD5</span><span class="o">::</span><span class="n">hexdigest</span><span class="p">(</span><span class="n">user</span><span class="p">.</span><span class="nf">email</span><span class="p">).</span><span class="nf">downcase</span>
+  <span class="n">url</span> <span class="o">=</span> <span class="s2">"https://gravatar.com/avatar/</span><span class="si">#{</span><span class="n">gravatar_id</span><span class="si">}</span><span class="s2">.png"</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p><strong>Note</strong>:</p>
+<ul>
+  <li>As you can see, the user’s username, avatar and sign out link will only be rendered if the user is signed in.</li>
+</ul>
+
+<p>The avatar image has a css class <code class="highlighter-rouge">avatar</code>. We have to define this class in the application’s stylesheets. Create a css file in which we will gather all css class that we will use in the application under the name <code class="highlighter-rouge">app/assets/stylesheets/rails-chat-tutorial.scss</code>.</p>
+
+<p>For now add the rule for the avatar:</p>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">.avatar</span> <span class="p">{</span>
+  <span class="nl">max-height</span><span class="p">:</span><span class="m">30px</span><span class="p">;</span>
+  <span class="nl">border-radius</span><span class="p">:</span> <span class="m">15px</span><span class="p">;</span>
+  <span class="nl">width</span><span class="p">:</span><span class="nb">auto</span><span class="p">;</span>
+  <span class="nl">vertical-align</span><span class="p">:</span><span class="nb">middle</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>and open <code class="highlighter-rouge">application.scss</code> to import the newly created stylesheet. Add the line:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@import "rails-chat-tutorial"
+</code></pre></div></div>
+
+<p>We have to add this partial in the application layout. Edit <code class="highlighter-rouge">app/views/layouts/application.html.erb</code> and change its contents to:</p>
+
+<div class="language-erb highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+  <span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;title&gt;</span>RailsChatTutorial<span class="nt">&lt;/title&gt;</span>
+    <span class="cp">&lt;%=</span> <span class="n">csrf_meta_tags</span> <span class="cp">%&gt;</span>
+    <span class="cp">&lt;%=</span> <span class="n">csp_meta_tag</span> <span class="cp">%&gt;</span>
+
+    <span class="cp">&lt;%=</span> <span class="n">stylesheet_link_tag</span>    <span class="s1">'application'</span><span class="p">,</span> <span class="ss">media: </span><span class="s1">'all'</span> <span class="cp">%&gt;</span>
+    <span class="cp">&lt;%=</span> <span class="n">javascript_include_tag</span> <span class="s1">'application'</span> <span class="cp">%&gt;</span>
+  <span class="nt">&lt;/head&gt;</span>
+
+  <span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"container"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"row"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"col-12"</span><span class="nt">&gt;</span>
+          <span class="cp">&lt;%=</span> <span class="n">render</span> <span class="ss">partial: </span><span class="s1">'shared/navigation_bar'</span> <span class="cp">%&gt;</span>
+          <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"my-3"</span><span class="nt">&gt;</span>
+            <span class="cp">&lt;%=</span> <span class="k">yield</span> <span class="cp">%&gt;</span>
+          <span class="nt">&lt;/div&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+      <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p>Reload to view the bar.</p>
+
+<p><img src="./Creating a chat application from scratch using Rails and WebSockets_files/08.png" alt="Sign up with navigation bar"></p>
+
+<p>Awesome. Fill in with your desired credentials and submit the form.</p>
+
+<p><img src="./Creating a chat application from scratch using Rails and WebSockets_files/09.png" alt="Signed in"></p>
+
+<h3 id="room-management">Room management</h3>
+
+<p>We are going to create a simple layout for groups.</p>
+
+<ul>
+  <li>One narrow column displaying vertically all the available rooms</li>
+  <li>One wide column which is going to host the chat messages and form.</li>
+</ul>
+
+<p>The rooms index page will have the second column empty since this column will be present only when user is inside a specific room.</p>
+
+<p>In the index page we will provide the option to create a room.</p>
+
+<h4 id="room-index">Room index</h4>
+
+<p>First we have to load all rooms in the <code class="highlighter-rouge">RoomsController</code>. Open <code class="highlighter-rouge">app/controllers/rooms_controller.rb</code> and change the index action as:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">index</span>
+  <span class="vi">@rooms</span> <span class="o">=</span> <span class="no">Room</span><span class="p">.</span><span class="nf">all</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>Open <code class="highlighter-rouge">app/views/rooms/index.html.erb</code> and change its contents to<sup><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#acknowledgments">[8]</a></sup>:</p>
+
+<div class="language-erb highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"row"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"col-12 col-md-3"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"mb-3"</span><span class="nt">&gt;</span>
+      <span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="n">new_room_path</span><span class="p">,</span> <span class="ss">class: </span><span class="s2">"btn btn-primary"</span> <span class="k">do</span> <span class="cp">%&gt;</span>
+        Create a room
+      <span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+
+    <span class="cp">&lt;%</span> <span class="k">if</span> <span class="vi">@rooms</span><span class="p">.</span><span class="nf">present?</span> <span class="cp">%&gt;</span>
+      <span class="nt">&lt;nav</span> <span class="na">class=</span><span class="s">"nav flex-column"</span><span class="nt">&gt;</span>
+        <span class="cp">&lt;%</span> <span class="vi">@rooms</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">room</span><span class="o">|</span> <span class="cp">%&gt;</span>
+          <span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="n">room</span><span class="p">.</span><span class="nf">name</span><span class="p">,</span> <span class="n">room_path</span><span class="p">(</span><span class="n">room</span><span class="p">),</span> <span class="ss">class: </span><span class="s2">"nav-link room-nav-link"</span> <span class="cp">%&gt;</span>
+        <span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span>
+      <span class="nt">&lt;/nav&gt;</span>
+    <span class="cp">&lt;%</span> <span class="k">else</span> <span class="cp">%&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"text-muted"</span><span class="nt">&gt;</span>
+        The are no rooms
+      <span class="nt">&lt;/div&gt;</span>
+    <span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"col"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"alert alert-primary"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;h4</span> <span class="na">class=</span><span class="s">"alert-heading"</span><span class="nt">&gt;</span>
+        Welcome to the RailsChatTutorial!
+      <span class="nt">&lt;/h4&gt;</span>
+
+      <span class="nt">&lt;p&gt;</span>
+        We need to talk.
+      <span class="nt">&lt;/p&gt;</span>
+
+      <span class="nt">&lt;hr</span> <span class="nt">/&gt;</span>
+
+      <span class="nt">&lt;p&gt;</span>
+        You can create or join a room from the sidebar.
+      <span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre></div></div>
+
+<p>If there are rooms, the left column of the page will render a vertical navigation with links leading to each room’s page. The right column displays a simple welcome message.</p>
+
+<p><img src="./Creating a chat application from scratch using Rails and WebSockets_files/10.png" alt="Room index"></p>
+
+<p>Pressing the <code class="highlighter-rouge">Create a room</code> button we get the expected error for the non-existent action.</p>
+
+<h4 id="room-newedit">Room new/edit</h4>
+
+<p>We have to define the actions for creating and updating a room.</p>
+
+<p>Open the <code class="highlighter-rouge">app/controllers/rooms_controller.rb</code> and change its contents to:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">RoomsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+  <span class="c1"># Loads:</span>
+  <span class="c1"># @rooms = all rooms</span>
+  <span class="c1"># @room = current room when applicable</span>
+  <span class="n">before_action</span> <span class="ss">:load_entities</span>
+
+  <span class="k">def</span> <span class="nf">index</span>
+    <span class="vi">@rooms</span> <span class="o">=</span> <span class="no">Room</span><span class="p">.</span><span class="nf">all</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">new</span>
+    <span class="vi">@room</span> <span class="o">=</span> <span class="no">Room</span><span class="p">.</span><span class="nf">new</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">create</span>
+    <span class="vi">@room</span> <span class="o">=</span> <span class="no">Room</span><span class="p">.</span><span class="nf">new</span> <span class="n">permitted_parameters</span>
+
+    <span class="k">if</span> <span class="vi">@room</span><span class="p">.</span><span class="nf">save</span>
+      <span class="n">flash</span><span class="p">[</span><span class="ss">:success</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"Room </span><span class="si">#{</span><span class="vi">@room</span><span class="p">.</span><span class="nf">name</span><span class="si">}</span><span class="s2"> was created successfully"</span>
+      <span class="n">redirect_to</span> <span class="n">rooms_path</span>
+    <span class="k">else</span>
+      <span class="n">render</span> <span class="ss">:new</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">edit</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">update</span>
+    <span class="k">if</span> <span class="vi">@room</span><span class="p">.</span><span class="nf">update_attributes</span><span class="p">(</span><span class="n">permitted_parameters</span><span class="p">)</span>
+      <span class="n">flash</span><span class="p">[</span><span class="ss">:success</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"Room </span><span class="si">#{</span><span class="vi">@room</span><span class="p">.</span><span class="nf">name</span><span class="si">}</span><span class="s2"> was updated successfully"</span>
+      <span class="n">redirect_to</span> <span class="n">rooms_path</span>
+    <span class="k">else</span>
+      <span class="n">render</span> <span class="ss">:new</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+  <span class="kp">protected</span>
+
+  <span class="k">def</span> <span class="nf">load_entities</span>
+    <span class="vi">@rooms</span> <span class="o">=</span> <span class="no">Room</span><span class="p">.</span><span class="nf">all</span>
+    <span class="vi">@room</span> <span class="o">=</span> <span class="no">Room</span><span class="p">.</span><span class="nf">find</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="ss">:id</span><span class="p">])</span> <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="ss">:id</span><span class="p">]</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">permitted_parameters</span>
+    <span class="n">params</span><span class="p">.</span><span class="nf">require</span><span class="p">(</span><span class="ss">:room</span><span class="p">).</span><span class="nf">permit</span><span class="p">(</span><span class="ss">:name</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p><strong>Note</strong>: we preload the <code class="highlighter-rouge">@rooms</code> and the <code class="highlighter-rouge">@room</code> variables making them available to all actions with the <code class="highlighter-rouge">before_action :load_entities</code> hook.</p>
+
+<p>We will create a simple form for the <code class="highlighter-rouge">Room</code> object and we will use it both when creating and editing a room. Create the <code class="highlighter-rouge">app/views/rooms/_form.html.erb</code> and add:</p>
+
+<div class="language-erb highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;%=</span> <span class="n">simple_form_for</span> <span class="vi">@room</span> <span class="k">do</span> <span class="o">|</span><span class="n">form</span><span class="o">|</span> <span class="cp">%&gt;</span>
+  <span class="cp">&lt;%=</span> <span class="n">form</span><span class="p">.</span><span class="nf">input</span> <span class="ss">:name</span> <span class="cp">%&gt;</span>
+  <span class="cp">&lt;%=</span> <span class="n">form</span><span class="p">.</span><span class="nf">submit</span> <span class="s2">"Save"</span><span class="p">,</span> <span class="ss">class: </span><span class="s1">'btn btn-success'</span> <span class="cp">%&gt;</span>
+<span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span>
+</code></pre></div></div>
+
+<p>Then, create the views for the <code class="highlighter-rouge">new</code>/<code class="highlighter-rouge">edit</code> action accordingly:</p>
+
+<p><em>app/views/rooms/new.html.erb</em></p>
+<div class="language-erb highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;h1&gt;</span>
+  Creating a room  
+<span class="nt">&lt;/h1&gt;</span>
+
+<span class="cp">&lt;%=</span> <span class="n">render</span> <span class="ss">partial: </span><span class="s1">'form'</span> <span class="cp">%&gt;</span>
+</code></pre></div></div>
+
+<p><em>app/views/rooms/edit.html.erb</em></p>
+<div class="language-erb highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;h1&gt;</span>
+  Editing room <span class="cp">&lt;%=</span> <span class="vi">@room</span><span class="p">.</span><span class="nf">name</span> <span class="cp">%&gt;</span>
+<span class="nt">&lt;/h1&gt;</span>
+
+<span class="cp">&lt;%=</span> <span class="n">render</span> <span class="ss">partial: </span><span class="s1">'form'</span> <span class="cp">%&gt;</span>
+</code></pre></div></div>
+
+<p>Time to create the first room. From the rooms’ index page, press the <code class="highlighter-rouge">Create a room</code></p>
+
+<p><img src="./Creating a chat application from scratch using Rails and WebSockets_files/11.png" alt="New room"></p>
+
+<p>Save and here it is.</p>
+
+<p><img src="./Creating a chat application from scratch using Rails and WebSockets_files/12.png" alt="Room index with rooms"></p>
+
+<p>Add this class in <code class="highlighter-rouge">app/assets/stylesheets/rails-chat-tutorial.scss</code> to improve the display of the rooms.</p>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">.room-nav-link</span> <span class="p">{</span>
+  <span class="nl">border</span><span class="p">:</span> <span class="m">1px</span> <span class="nb">solid</span> <span class="n">lighten</span><span class="p">(</span><span class="err">$</span><span class="n">primary</span><span class="p">,</span> <span class="m">40%</span><span class="p">);</span>
+  <span class="nl">background</span><span class="p">:</span> <span class="n">lighten</span><span class="p">(</span><span class="err">$</span><span class="n">primary</span><span class="p">,</span> <span class="m">45%</span><span class="p">);</span>
+
+  <span class="err">&amp;</span> <span class="err">+</span> <span class="err">.room-nav-link</span> <span class="err">{</span>
+    <span class="nl">border-top</span><span class="p">:</span> <span class="m">0</span> <span class="nb">none</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="err">}</span>
+</code></pre></div></div>
+
+<p><img src="./Creating a chat application from scratch using Rails and WebSockets_files/13.png" alt="Room index with improved rooms"></p>
+
+<p><strong>Note</strong>: We will add the <code class="highlighter-rouge">edit</code> link in the room’s page a.k.a. <code class="highlighter-rouge">show</code> action.</p>
+
+<p>Before moving on to the Room page, we will refactor the index page so as to be able to use the left column’s content inside the room page as well.</p>
+
+<p>Create the partial <code class="highlighter-rouge">app/views/rooms/_rooms.html.erb</code> with contents:</p>
+
+<div class="language-erb highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"mb-3"</span><span class="nt">&gt;</span>
+  <span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="n">new_room_path</span><span class="p">,</span> <span class="ss">class: </span><span class="s1">'btn btn-primary'</span> <span class="k">do</span> <span class="cp">%&gt;</span>
+    Create a room
+  <span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+
+<span class="cp">&lt;%</span> <span class="k">if</span> <span class="vi">@rooms</span><span class="p">.</span><span class="nf">present?</span> <span class="cp">%&gt;</span>
+  <span class="nt">&lt;nav</span> <span class="na">class=</span><span class="s">"nav flex-column"</span><span class="nt">&gt;</span>
+    <span class="cp">&lt;%</span> <span class="vi">@rooms</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">room</span><span class="o">|</span> <span class="cp">%&gt;</span>
+      <span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="n">room</span><span class="p">.</span><span class="nf">name</span><span class="p">,</span> <span class="n">room_path</span><span class="p">(</span><span class="n">room</span><span class="p">),</span> <span class="ss">class: </span><span class="s1">'nav-link room-nav-link'</span> <span class="cp">%&gt;</span>
+    <span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span>
+  <span class="nt">&lt;/nav&gt;</span>
+<span class="cp">&lt;%</span> <span class="k">else</span> <span class="cp">%&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"text-muted"</span><span class="nt">&gt;</span>
+    The are no rooms
+  <span class="nt">&lt;/div&gt;</span>
+<span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span>
+</code></pre></div></div>
+
+<p>and change the <code class="highlighter-rouge">app/views/rooms/index.html.erb</code> to use it:</p>
+
+<div class="language-erb highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"row"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"col-12 col-md-3"</span><span class="nt">&gt;</span>
+    <span class="cp">&lt;%=</span> <span class="n">render</span> <span class="ss">partial: </span><span class="s1">'rooms'</span> <span class="cp">%&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"col"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"alert alert-primary"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;h4</span> <span class="na">class=</span><span class="s">"alert-heading"</span><span class="nt">&gt;</span>
+        Welcome to the RailsChatTutorial!
+      <span class="nt">&lt;/h4&gt;</span>
+
+      <span class="nt">&lt;p&gt;</span>
+        We need to talk.
+      <span class="nt">&lt;/p&gt;</span>
+
+      <span class="nt">&lt;hr</span> <span class="nt">/&gt;</span>
+
+      <span class="nt">&lt;p&gt;</span>
+        You can create or join a room from the sidebar.
+      <span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre></div></div>
+
+<h4 id="room-page">Room page</h4>
+
+<p>Add the <code class="highlighter-rouge">show</code> action in the <code class="highlighter-rouge">app/controllers/rooms_controller.rb</code>:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">show</span>
+  <span class="vi">@room_message</span> <span class="o">=</span> <span class="no">RoomMessage</span><span class="p">.</span><span class="nf">new</span> <span class="ss">room: </span><span class="vi">@room</span>
+  <span class="vi">@room_messages</span> <span class="o">=</span> <span class="vi">@room</span><span class="p">.</span><span class="nf">room_messages</span><span class="p">.</span><span class="nf">includes</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p><strong>Notes:</strong></p>
+<ul>
+  <li>We construct a new room message which we are going to use in the view to build a form for creating the chat messages.</li>
+  <li>When displaying the room message, we access its user’s email attribute to resolve the gravatar hash. We used <code class="highlighter-rouge">.includes(:user)</code> in the query for the <code class="highlighter-rouge">@room_messages</code> to fetch them along with their users avoiding <a href="https://medium.com/@bretdoucette/n-1-queries-and-how-to-avoid-them-a12f02345be5">N+1 queries</a><sup><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#acknowledgments">[1]</a></sup>.</li>
+</ul>
+
+<p>Create the view <code class="highlighter-rouge">app/views/rooms/show.html.erb</code>:</p>
+
+<div class="language-erb highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;h1&gt;</span>
+  <span class="cp">&lt;%=</span> <span class="vi">@room</span><span class="p">.</span><span class="nf">name</span> <span class="cp">%&gt;</span>
+<span class="nt">&lt;/h1&gt;</span>
+
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"row"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"col-12 col-md-3"</span><span class="nt">&gt;</span>
+    <span class="cp">&lt;%=</span> <span class="n">render</span> <span class="ss">partial: </span><span class="s1">'rooms'</span> <span class="cp">%&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"col"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"chat"</span><span class="nt">&gt;</span>
+      <span class="cp">&lt;%</span> <span class="vi">@room_messages</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">room_message</span><span class="o">|</span> <span class="cp">%&gt;</span>
+        <span class="cp">&lt;%=</span> <span class="n">room_message</span> <span class="cp">%&gt;</span>
+      <span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+
+    <span class="cp">&lt;%=</span> <span class="n">simple_form_for</span> <span class="vi">@room_message</span><span class="p">,</span> <span class="ss">remote: </span><span class="kp">true</span> <span class="k">do</span> <span class="o">|</span><span class="n">form</span><span class="o">|</span> <span class="cp">%&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"input-group mb-3"</span><span class="nt">&gt;</span>
+        <span class="cp">&lt;%=</span> <span class="n">form</span><span class="p">.</span><span class="nf">input</span> <span class="ss">:message</span><span class="p">,</span> <span class="ss">as: :string</span><span class="p">,</span>
+                                 <span class="ss">wrapper: </span><span class="kp">false</span><span class="p">,</span>
+                                 <span class="ss">label: </span><span class="kp">false</span><span class="p">,</span>
+                                 <span class="ss">input_html: </span><span class="p">{</span>
+                                   <span class="ss">class: </span><span class="s1">'chat-input'</span>
+                                 <span class="p">}</span> <span class="cp">%&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"input-group-append"</span><span class="nt">&gt;</span>
+          <span class="cp">&lt;%=</span> <span class="n">form</span><span class="p">.</span><span class="nf">submit</span> <span class="s2">"Send"</span><span class="p">,</span> <span class="ss">class: </span><span class="s1">'btn btn-primary chat-input'</span> <span class="cp">%&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+      <span class="nt">&lt;/div&gt;</span>
+
+      <span class="cp">&lt;%=</span> <span class="n">form</span><span class="p">.</span><span class="nf">input</span> <span class="ss">:room_id</span><span class="p">,</span> <span class="ss">as: :hidden</span> <span class="cp">%&gt;</span>
+    <span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre></div></div>
+
+<p><strong>Notes:</strong></p>
+<ul>
+  <li>We reused the <code class="highlighter-rouge">app/views/rooms/_rooms.html.erb</code> partial that we created in the previous step</li>
+  <li>We added a <code class="highlighter-rouge">div</code> with class <code class="highlighter-rouge">.chat</code> and this is where the room’s messages are rendered.</li>
+  <li>We added a form for the <code class="highlighter-rouge">@room_message</code> that we instantiated in the controller. We also used the directive <code class="highlighter-rouge">remote: true</code> when we instantiated the form thus the form is going to be submitted by <strong>Ajax</strong>.</li>
+  <li>We added a hidden field for the attribute <code class="highlighter-rouge">:room_id</code> so that the value reaches the <code class="highlighter-rouge">RoomMessagesController</code> once we submit the form.</li>
+</ul>
+
+<p>Style the chat components by adding the following lines to the <code class="highlighter-rouge">app/assets/stylesheets/rails-chat-tutorial.scss</code>:</p>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">.chat</span> <span class="p">{</span>
+  <span class="nl">border</span><span class="p">:</span> <span class="m">1px</span> <span class="nb">solid</span> <span class="n">lighten</span><span class="p">(</span><span class="err">$</span><span class="n">secondary</span><span class="p">,</span> <span class="m">40%</span><span class="p">);</span>
+  <span class="nl">background</span><span class="p">:</span> <span class="n">lighten</span><span class="p">(</span><span class="err">$</span><span class="n">secondary</span><span class="p">,</span> <span class="m">50%</span><span class="p">);</span>
+  <span class="nl">height</span><span class="p">:</span> <span class="m">50vh</span><span class="p">;</span>
+  <span class="nl">border-radius</span><span class="p">:</span> <span class="m">5px</span> <span class="m">5px</span> <span class="m">0</span> <span class="m">0</span><span class="p">;</span>
+  <span class="nl">overflow-y</span><span class="p">:</span> <span class="nb">auto</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.chat-input</span> <span class="p">{</span>
+  <span class="nl">border-top</span><span class="p">:</span> <span class="m">0</span> <span class="nb">none</span><span class="p">;</span>
+  <span class="nl">border-radius</span><span class="p">:</span> <span class="m">0</span> <span class="m">0</span> <span class="m">5px</span> <span class="m">5px</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Navigate to a room to see what has been done.</p>
+
+<p><img src="./Creating a chat application from scratch using Rails and WebSockets_files/14.png" alt="Room page with chat"></p>
+
+<p>Pressing the <code class="highlighter-rouge">Send</code> button nothing happens on the page but if you check the server’s console you will notice:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>AbstractController::ActionNotFound (The action 'create' could not be found for RoomMessagesController):
+</code></pre></div></div>
+
+<p>Let’s fix that.</p>
+
+<h4 id="creating-room-messages">Creating room messages</h4>
+
+<p>This is going to be easy. All we have to do is implement the <code class="highlighter-rouge">create</code> action in the <code class="highlighter-rouge">RoomMessagesController</code>.</p>
+
+<p><em>app/controllers/room_messages_controller.rb</em></p>
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">RoomMessagesController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+  <span class="n">before_action</span> <span class="ss">:load_entities</span>
+
+  <span class="k">def</span> <span class="nf">create</span>
+    <span class="vi">@room_message</span> <span class="o">=</span> <span class="no">RoomMessage</span><span class="p">.</span><span class="nf">create</span> <span class="ss">user: </span><span class="n">current_user</span><span class="p">,</span>
+                                       <span class="ss">room: </span><span class="vi">@room</span><span class="p">,</span>
+                                       <span class="ss">message: </span><span class="n">params</span><span class="p">.</span><span class="nf">dig</span><span class="p">(</span><span class="ss">:room_message</span><span class="p">,</span> <span class="ss">:message</span><span class="p">)</span>
+  <span class="k">end</span>
+
+  <span class="kp">protected</span>
+
+  <span class="k">def</span> <span class="nf">load_entities</span>
+    <span class="vi">@room</span> <span class="o">=</span> <span class="no">Room</span><span class="p">.</span><span class="nf">find</span> <span class="n">params</span><span class="p">.</span><span class="nf">dig</span><span class="p">(</span><span class="ss">:room_message</span><span class="p">,</span> <span class="ss">:room_id</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p><strong>Notes:</strong></p>
+<ul>
+  <li>we preload the room using the <code class="highlighter-rouge">room_id</code> parameter that we added as a hidden field in the form in the previous step</li>
+  <li>we create a new message for the room setting its user to the currently signed in user</li>
+</ul>
+
+<p>If you try to submit a message now, again you will see nothing but in the server console you can see from the log that the room message has been created.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Started POST "/room_messages" for ::1 at 2019-04-04 19:24:33 +0300
+Processing by RoomMessagesController#create as JS
+  Parameters: {"utf8"=&gt;"✓", "room_message"=&gt;{"message"=&gt;"My first message", "room_id"=&gt;"8"}, "commit"=&gt;"Send"}
+  User Load (0.2ms)  SELECT  "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?  [["id", 1], ["LIMIT", 1]]
+  ↳ /home/iridakos/.rvm/gems/ruby-2.6.2@rails-chat-tutorial/gems/activerecord-5.2.3/lib/active_record/log_subscriber.rb:98
+  Room Load (0.2ms)  SELECT  "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?  [["id", 8], ["LIMIT", 1]]
+  ↳ app/controllers/room_messages_controller.rb:13
+   (0.1ms)  begin transaction
+  ↳ app/controllers/room_messages_controller.rb:5
+  RoomMessage Create (0.7ms)  INSERT INTO "room_messages" ("room_id", "user_id", "message", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)  [["room_id", 8], ["user_id", 1], ["message", "My first message"], ["created_at", "2019-04-04 16:24:33.456641"], ["updated_at", "2019-04-04 16:24:33.456641"]]
+  ↳ app/controllers/room_messages_controller.rb:5
+   (4.0ms)  commit transaction
+  ↳ app/controllers/room_messages_controller.rb:5
+No template found for RoomMessagesController#create, rendering head :no_content
+Completed 204 No Content in 88ms (ActiveRecord: 5.1ms)
+</code></pre></div></div>
+
+<p>A user would expect to have the message field cleared after sending a new message. We don’t disappoint users.</p>
+
+<p>Create a file <code class="highlighter-rouge">app/assets/javascripts/room.js</code> and add the following:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#new_room_message</span><span class="dl">'</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">ajax:success</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span><span class="nx">c</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="dl">'</span><span class="s1">input[type="text"]</span><span class="dl">'</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="dl">''</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>We bind to the <code class="highlighter-rouge">ajax:success</code> event triggered by <a href="https://guides.rubyonrails.org/working_with_javascript_in_rails.html#form-with">Rails</a> on successful submission of the form and all we want to do is clear the text field’s value.</p>
+
+<p>Reload the page and try submitting again and check it out. The field value should be emptied after sending the message.</p>
+
+<h4 id="displaying-room-messages">Displaying room messages</h4>
+
+<p>If you reload the page you will see something like this:</p>
+
+<p><img src="./Creating a chat application from scratch using Rails and WebSockets_files/15.png" alt="Room message to string"></p>
+
+<p>Let’s beautify the messages.</p>
+
+<p>Replace the contents of <code class="highlighter-rouge">app/views/rooms/show.html.erb</code> with:</p>
+
+<div class="language-erb highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;h1&gt;</span>
+  <span class="cp">&lt;%=</span> <span class="vi">@room</span><span class="p">.</span><span class="nf">name</span> <span class="cp">%&gt;</span>
+<span class="nt">&lt;/h1&gt;</span>
+
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"row"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"col-12 col-md-3"</span><span class="nt">&gt;</span>
+    <span class="cp">&lt;%=</span> <span class="n">render</span> <span class="ss">partial: </span><span class="s1">'rooms'</span> <span class="cp">%&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"col"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"chat"</span><span class="nt">&gt;</span>
+      <span class="cp">&lt;%</span> <span class="vi">@room_messages</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">room_message</span><span class="o">|</span> <span class="cp">%&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"chat-message-container"</span><span class="nt">&gt;</span>
+          <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"row no-gutters"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"col-auto text-center"</span><span class="nt">&gt;</span>
+              <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"</span><span class="cp">&lt;%=</span> <span class="n">gravatar_url</span><span class="p">(</span><span class="n">room_message</span><span class="p">.</span><span class="nf">user</span><span class="p">)</span> <span class="cp">%&gt;</span><span class="s">"</span> <span class="na">class=</span><span class="s">"avatar"</span> <span class="na">alt=</span><span class="s">""</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;/div&gt;</span>
+
+            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"col"</span><span class="nt">&gt;</span>
+              <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"message-content"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">"mb-1"</span><span class="nt">&gt;</span>
+                  <span class="cp">&lt;%=</span> <span class="n">room_message</span><span class="p">.</span><span class="nf">message</span> <span class="cp">%&gt;</span>
+                <span class="nt">&lt;/p&gt;</span>
+
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"text-right"</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;small&gt;</span>
+                    <span class="cp">&lt;%=</span> <span class="n">room_message</span><span class="p">.</span><span class="nf">created_at</span> <span class="cp">%&gt;</span>
+                  <span class="nt">&lt;/small&gt;</span>
+                <span class="nt">&lt;/div&gt;</span>
+              <span class="nt">&lt;/div&gt;</span>
+            <span class="nt">&lt;/div&gt;</span>
+          <span class="nt">&lt;/div&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+      <span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+
+    <span class="cp">&lt;%=</span> <span class="n">simple_form_for</span> <span class="vi">@room_message</span><span class="p">,</span> <span class="ss">remote: </span><span class="kp">true</span> <span class="k">do</span> <span class="o">|</span><span class="n">form</span><span class="o">|</span> <span class="cp">%&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"input-group mb-3"</span><span class="nt">&gt;</span>
+        <span class="cp">&lt;%=</span> <span class="n">form</span><span class="p">.</span><span class="nf">input</span> <span class="ss">:message</span><span class="p">,</span> <span class="ss">as: :string</span><span class="p">,</span>
+                                 <span class="ss">wrapper: </span><span class="kp">false</span><span class="p">,</span>
+                                 <span class="ss">label: </span><span class="kp">false</span><span class="p">,</span>
+                                 <span class="ss">input_html: </span><span class="p">{</span>
+                                   <span class="ss">class: </span><span class="s1">'chat-input'</span>
+                                 <span class="p">}</span> <span class="cp">%&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"input-group-append"</span><span class="nt">&gt;</span>
+          <span class="cp">&lt;%=</span> <span class="n">form</span><span class="p">.</span><span class="nf">submit</span> <span class="s2">"Send"</span><span class="p">,</span> <span class="ss">class: </span><span class="s1">'btn btn-primary chat-input'</span> <span class="cp">%&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+      <span class="nt">&lt;/div&gt;</span>
+
+      <span class="cp">&lt;%=</span> <span class="n">form</span><span class="p">.</span><span class="nf">input</span> <span class="ss">:room_id</span><span class="p">,</span> <span class="ss">as: :hidden</span> <span class="cp">%&gt;</span>
+    <span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre></div></div>
+
+<p>and add the following css classes <strong>inside the .chat class</strong>:</p>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">.chat-message-container</span> <span class="p">{</span>
+  <span class="nl">padding</span><span class="p">:</span> <span class="m">5px</span><span class="p">;</span>
+
+  <span class="err">.avatar</span> <span class="err">{</span>
+    <span class="nl">margin</span><span class="p">:</span> <span class="m">5px</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nc">.message-content</span> <span class="p">{</span>
+    <span class="nl">padding</span><span class="p">:</span> <span class="m">5px</span><span class="p">;</span>
+    <span class="nl">border</span><span class="p">:</span> <span class="m">1px</span> <span class="nb">solid</span> <span class="err">$</span><span class="n">primary</span><span class="p">;</span>
+    <span class="nl">border-radius</span><span class="p">:</span> <span class="m">5px</span><span class="p">;</span>
+    <span class="nl">background</span><span class="p">:</span> <span class="n">lighten</span><span class="p">(</span><span class="err">$</span><span class="n">primary</span><span class="p">,</span> <span class="m">10%</span><span class="p">);</span>
+    <span class="nl">color</span><span class="p">:</span> <span class="err">$</span><span class="no">white</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="o">&amp;</span> <span class="o">+</span> <span class="nc">.chat-message-container</span> <span class="p">{</span>
+    <span class="nl">margin-top</span><span class="p">:</span> <span class="m">10px</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="err">}</span>
+</code></pre></div></div>
+
+<p>Reload the page. Magic.</p>
+
+<p><img src="./Creating a chat application from scratch using Rails and WebSockets_files/16.png" alt="Improved display of room messages"></p>
+
+<h2 id="introducing-websockets---actioncable">Introducing WebSockets - ActionCable</h2>
+
+<p>Time to start using WebSockets with ActionCable.</p>
+
+<blockquote>
+  <p>Action Cable seamlessly integrates WebSockets with the rest of your Rails application. It allows for real-time features to be written in Ruby in the same style and form as the rest of your Rails application, while still being performant and scalable. It’s a full-stack offering that provides both a client-side JavaScript framework and a server-side Ruby framework. You have access to your full domain model written with Active Record or your ORM of choice.
+<cite>– <a href="https://guides.rubyonrails.org/action_cable_overview.html">Action Cable Overview @ Ruby on Rails Guides (v5.2.3)</a></cite></p>
+</blockquote>
+
+<h3 id="install-redis">Install redis</h3>
+
+<p>We are going to use the <code class="highlighter-rouge">redis</code> adapter which is <a href="https://guides.rubyonrails.org/action_cable_overview.html#redis-adapter">a safe option for production environments</a> unlike the <code class="highlighter-rouge">async</code> one.</p>
+
+<p>You first must install <a href="https://redis.io/">redis</a> on your system.</p>
+
+<p>To install it on Ubuntu you just have to execute the following commands in your terminal:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt update
+<span class="nb">sudo </span>apt <span class="nb">install </span>redis-server
+</code></pre></div></div>
+
+<p>To check that installation is successful, in your terminal make sure you get a PONG:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ redis-cli
+127.0.0.1:6379&gt; ping
+PONG
+</code></pre></div></div>
+
+<h3 id="configure-actioncable">Configure ActionCable</h3>
+
+<p>Since we are working on the development environment, open your <code class="highlighter-rouge">config/cable.yml</code> and replace its contents with:</p>
+
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">development</span><span class="pi">:</span>
+  <span class="na">adapter</span><span class="pi">:</span> <span class="s">redis</span>
+  <span class="na">url</span><span class="pi">:</span> <span class="s">&lt;%= ENV.fetch("REDIS_URL") { "redis://localhost:6379/1" } %&gt;</span>
+  <span class="na">channel_prefix</span><span class="pi">:</span> <span class="s">rails-chat-tutorial_development</span>
+
+<span class="na">test</span><span class="pi">:</span>
+  <span class="na">adapter</span><span class="pi">:</span> <span class="s">async</span>
+
+<span class="na">production</span><span class="pi">:</span>
+  <span class="na">adapter</span><span class="pi">:</span> <span class="s">redis</span>
+  <span class="na">url</span><span class="pi">:</span> <span class="s">&lt;%= ENV.fetch("REDIS_URL") { "redis://localhost:6379/1" } %&gt;</span>
+  <span class="na">channel_prefix</span><span class="pi">:</span> <span class="s">rails-chat-tutorial_production</span>
+</code></pre></div></div>
+
+<p><strong>Note:</strong> we have added an option <code class="highlighter-rouge">channel_prefix</code> because:</p>
+
+<blockquote>
+  <p>Additionally, a channel_prefix may be provided to avoid channel name collisions when using the same Redis server for multiple applications
+<cite>– <a href="https://guides.rubyonrails.org/action_cable_overview.html#redis-adapter">Action Cable Overview # Redis Adapter @ Ruby on Rails Guides (v5.2.3)</a></cite></p>
+</blockquote>
+
+<p>Finally, we are going to add the dependency in the <code class="highlighter-rouge">Gemfile</code>:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">gem</span> <span class="s1">'redis'</span>
+</code></pre></div></div>
+
+<p>Don’t forget to bundle after altering the <code class="highlighter-rouge">Gemfile</code>.</p>
+
+<h3 id="configure-devise-for-authenticating-websocket-connections">Configure Devise for authenticating websocket connections</h3>
+
+<p>When establishing a websocket connection, we don’t have access to the user session but we do have access to the cookies. So, in order to be able to authenticate the user we need to do some devise related stuff first (<a href="https://rubytutorial.io/actioncable-devise-authentication/">credits to Greg Molnar</a>).</p>
+
+<p>Create an initializer for warden hooks under the name <code class="highlighter-rouge">config/initializers/warden_hooks.rb</code> and add the following lines:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="no">Warden</span><span class="o">::</span><span class="no">Manager</span><span class="p">.</span><span class="nf">after_set_user</span> <span class="k">do</span> <span class="o">|</span><span class="n">user</span><span class="p">,</span><span class="n">auth</span><span class="p">,</span><span class="n">opts</span><span class="o">|</span>
+  <span class="n">scope</span> <span class="o">=</span> <span class="n">opts</span><span class="p">[</span><span class="ss">:scope</span><span class="p">]</span>
+  <span class="n">auth</span><span class="p">.</span><span class="nf">cookies</span><span class="p">.</span><span class="nf">signed</span><span class="p">[</span><span class="s2">"</span><span class="si">#{</span><span class="n">scope</span><span class="si">}</span><span class="s2">.id"</span><span class="p">]</span> <span class="o">=</span> <span class="n">user</span><span class="p">.</span><span class="nf">id</span>
+<span class="k">end</span>
+
+<span class="no">Warden</span><span class="o">::</span><span class="no">Manager</span><span class="p">.</span><span class="nf">before_logout</span> <span class="k">do</span> <span class="o">|</span><span class="n">user</span><span class="p">,</span> <span class="n">auth</span><span class="p">,</span> <span class="n">opts</span><span class="o">|</span>
+  <span class="n">scope</span> <span class="o">=</span> <span class="n">opts</span><span class="p">[</span><span class="ss">:scope</span><span class="p">]</span>
+  <span class="n">auth</span><span class="p">.</span><span class="nf">cookies</span><span class="p">.</span><span class="nf">signed</span><span class="p">[</span><span class="s2">"</span><span class="si">#{</span><span class="n">scope</span><span class="si">}</span><span class="s2">.id"</span><span class="p">]</span> <span class="o">=</span> <span class="kp">nil</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p><strong>Explain:</strong> We add a cookie with the user’s id upon successful sign in and we remove it once the user logs out.</p>
+
+<h3 id="configure-the-websocket-connection">Configure the websocket connection</h3>
+
+<p>Open <code class="highlighter-rouge">app/channels/application_cable/connection.rb</code> and change its contents to the following:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">module</span> <span class="nn">ApplicationCable</span>
+  <span class="k">class</span> <span class="nc">Connection</span> <span class="o">&lt;</span> <span class="no">ActionCable</span><span class="o">::</span><span class="no">Connection</span><span class="o">::</span><span class="no">Base</span>
+    <span class="n">identified_by</span> <span class="ss">:current_user</span>
+
+    <span class="k">def</span> <span class="nf">connect</span>
+      <span class="nb">self</span><span class="p">.</span><span class="nf">current_user</span> <span class="o">=</span> <span class="n">find_verified_user</span>
+    <span class="k">end</span>
+
+    <span class="kp">private</span>
+
+    <span class="k">def</span> <span class="nf">find_verified_user</span>
+      <span class="k">if</span> <span class="n">verified_user</span> <span class="o">=</span> <span class="no">User</span><span class="p">.</span><span class="nf">find_by</span><span class="p">(</span><span class="ss">id: </span><span class="n">cookies</span><span class="p">.</span><span class="nf">signed</span><span class="p">[</span><span class="s1">'user.id'</span><span class="p">])</span>
+        <span class="n">verified_user</span>
+      <span class="k">else</span>
+        <span class="n">reject_unauthorized_connection</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p><strong>Explain:</strong></p>
+
+<blockquote>
+  <p>Here identified_by is a connection identifier that can be used to find the specific connection later. Note that anything marked as an identifier will automatically create a delegate by the same name on any channel instances created off the connection.
+<cite>– <a href="https://guides.rubyonrails.org/action_cable_overview.html#connection-setup">Action Cable Overview # Connection setup @ Ruby on Rails Guides (v5.2.3)</a></cite></p>
+</blockquote>
+
+<p>In the <code class="highlighter-rouge">find_verified_user</code> method we access the cookie that we previously set in the warden hook.</p>
+
+<h3 id="create-the-room-channel">Create the room channel</h3>
+
+<blockquote>
+  <p>A channel encapsulates a logical unit of work, similar to what a controller does in a regular MVC setup.
+<cite>– <a href="https://guides.rubyonrails.org/action_cable_overview.html#channelsp">Action Cable Overview # Channels @ Ruby on Rails Guides (v5.2.3)</a></cite></p>
+</blockquote>
+
+<p>We will create the <code class="highlighter-rouge">RoomChannel</code> in which all Room pages will subscribe to.</p>
+
+<p>Create <code class="highlighter-rouge">app/channels/room_channel.rb</code> with the following contents:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">RoomChannel</span> <span class="o">&lt;</span> <span class="no">ApplicationCable</span><span class="o">::</span><span class="no">Channel</span>
+  <span class="k">def</span> <span class="nf">subscribed</span>
+    <span class="n">room</span> <span class="o">=</span> <span class="no">Room</span><span class="p">.</span><span class="nf">find</span> <span class="n">params</span><span class="p">[</span><span class="ss">:room</span><span class="p">]</span>
+    <span class="n">stream_for</span> <span class="n">room</span>
+
+    <span class="c1"># or</span>
+    <span class="c1"># stream_from "room_#{params[:room]}"</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p><strong>Explain</strong>:</p>
+
+<ul>
+  <li>The <code class="highlighter-rouge">subscribed</code> method gets called once a subscription to the channel is established and it is responsible to setup the stream from which data will be sent back and forth.</li>
+</ul>
+
+<p>We are going to configure the room page code later on to request subscriptions to this channel passing the <code class="highlighter-rouge">room</code> parameter.</p>
+
+<p>We have two options:</p>
+
+<ul>
+  <li>Use <code class="highlighter-rouge">stream_for</code>: this way Rails automatically generates a stream name for the given object (<code class="highlighter-rouge">room</code> in our case), for example: “room:asdfwer234”. When we want afterwards to broadcast data to the stream, all we have to do is call <code class="highlighter-rouge">RoomChannel.broadcast_to(room_object, data)</code> in which case Rails resolves the stream name from the <code class="highlighter-rouge">room_object</code>. In other words, we don’t have to manually resolve the stream name in which the data have to be send (see next item).
+    <ul>
+      <li>This option is available when the channel handles subscriptions bound to models like in our case, a specific room</li>
+    </ul>
+  </li>
+  <li>Use <code class="highlighter-rouge">stream_from</code>: we manually define the name of the stream and later on, when we want to broadcast to the stream, we have to use: <code class="highlighter-rouge">ActionCable.server.broadcast("room_#{a_room_id_here}", data)</code>.</li>
+</ul>
+
+<p>Read more <a href="https://guides.rubyonrails.org/action_cable_overview.html#streams">here</a>.</p>
+
+<h3 id="broadcast-room-messages">Broadcast room messages</h3>
+
+<p>Every time a room message is being created, we just need to broadcast to the message’s room stream.
+To do so, alter the <code class="highlighter-rouge">create</code> action of the <code class="highlighter-rouge">app/controllers/room_messages_controller.rb</code> to this:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">create</span>
+  <span class="vi">@room_message</span> <span class="o">=</span> <span class="no">RoomMessage</span><span class="p">.</span><span class="nf">create</span> <span class="ss">user: </span><span class="n">current_user</span><span class="p">,</span>
+                                     <span class="ss">room: </span><span class="vi">@room</span><span class="p">,</span>
+                                     <span class="ss">message: </span><span class="n">params</span><span class="p">.</span><span class="nf">dig</span><span class="p">(</span><span class="ss">:room_message</span><span class="p">,</span> <span class="ss">:message</span><span class="p">)</span>
+
+  <span class="no">RoomChannel</span><span class="p">.</span><span class="nf">broadcast_to</span> <span class="vi">@room</span><span class="p">,</span> <span class="vi">@room_message</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p><strong>Explain</strong>: we added the line <code class="highlighter-rouge">RoomChannel.broadcast_to @room, @room_message</code> which will broadcast to the room’s specific stream (as explained above) the <code class="highlighter-rouge">@room_message</code> transformed to json via the <code class="highlighter-rouge">to_json</code> method.</p>
+
+<p>So, on the other side, the client side, we are going to be receiving the json representation of the <code class="highlighter-rouge">RoomMessage</code> model. Let’s see what that is:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="mi">29</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"room_id"</span><span class="p">:</span><span class="mi">8</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"user_id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"message"</span><span class="p">:</span><span class="s2">"My first message"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"created_at"</span><span class="p">:</span><span class="s2">"2019-04-04T17:09:00.637Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"updated_at"</span><span class="p">:</span><span class="s2">"2019-04-04T17:09:00.637Z"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>We plan to add the new messages in the room’s page via Javascript and this information is not adequate. The only thing we are missing is the user avatar. Time to refactor.</p>
+
+<p>Open <code class="highlighter-rouge">app/models/user.rb</code> and add the following method:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def gravatar_url
+  gravatar_id = Digest::MD5::hexdigest(email).downcase
+  "https://gravatar.com/avatar/#{gravatar_id}.png"
+end
+</code></pre></div></div>
+
+<p>We had already implemented this in the <code class="highlighter-rouge">app/helpers/application_helper.rb</code> file and we won’t be using it anymore so <strong>remove it</strong>.</p>
+
+<p>Update <code class="highlighter-rouge">app/views/shared/_navigation_bar.html.erb</code> and change the previous gravatar resolution to this:</p>
+
+<div class="language-erb highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;img</span> <span class="na">class=</span><span class="s">"avatar"</span> <span class="na">src=</span><span class="s">"</span><span class="cp">&lt;%=</span> <span class="n">current_user</span><span class="p">.</span><span class="nf">gravatar_url</span> <span class="cp">%&gt;</span><span class="s">"</span><span class="nt">&gt;</span>
+</code></pre></div></div>
+
+<p>Update <code class="highlighter-rouge">app/views/rooms/show.html.erb</code> and change it there too, with:</p>
+
+<div class="language-erb highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"</span><span class="cp">&lt;%=</span> <span class="n">room_message</span><span class="p">.</span><span class="nf">user</span><span class="p">.</span><span class="nf">gravatar_url</span> <span class="cp">%&gt;</span><span class="s">"</span> <span class="na">class=</span><span class="s">"avatar"</span> <span class="na">alt=</span><span class="s">""</span><span class="nt">&gt;</span>
+</code></pre></div></div>
+
+<p>Finally, we will change the <code class="highlighter-rouge">JSON</code> representation of the <code class="highlighter-rouge">RoomMessage</code> to include the user’s url:</p>
+
+<p><em>app/models/room_message.rb</em></p>
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">as_json</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+  <span class="k">super</span><span class="p">(</span><span class="n">options</span><span class="p">).</span><span class="nf">merge</span><span class="p">(</span><span class="ss">user_avatar_url: </span><span class="n">user</span><span class="p">.</span><span class="nf">gravatar_url</span><span class="p">)</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>Let’s confirm that the new JSON transformation is valid:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="mi">29</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"room_id"</span><span class="p">:</span><span class="mi">8</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"user_id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"message"</span><span class="p">:</span><span class="s2">"My first message"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"created_at"</span><span class="p">:</span><span class="s2">"2019-04-04T17:09:00.637Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"updated_at"</span><span class="p">:</span><span class="s2">"2019-04-04T17:09:00.637Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"user_avatar_url"</span><span class="p">:</span><span class="s2">"https://gravatar.com/avatar/02a28db6886d578f75a820b50f2dd334.png"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Great, moving on.</p>
+
+<h3 id="subscribe-to-the-room-stream">Subscribe to the room stream</h3>
+
+<p>We are going to add some data in the room page in order to use them via Javascript to subscribe to the appropriate streams each time we visit a room.</p>
+
+<p>Open the file <code class="highlighter-rouge">app/views/rooms/show.html.erb</code> and alter the line in which we define the chat div, to this:</p>
+
+<div class="language-erb highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"chat"</span> <span class="na">data-channel-subscribe=</span><span class="s">"room"</span> <span class="na">data-room-id=</span><span class="s">"</span><span class="cp">&lt;%=</span> <span class="vi">@room</span><span class="p">.</span><span class="nf">id</span> <span class="cp">%&gt;</span><span class="s">"</span><span class="nt">&gt;</span>
+</code></pre></div></div>
+
+<p><strong>Explain</strong>: We added two data attributes, one defining to which channel we want to subscribe and one defining to which room we are.</p>
+
+<p>At the end of the file, add the following snippet:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"d-none"</span> <span class="na">data-role=</span><span class="s">"message-template"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"chat-message-container"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"row no-gutters"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"col-auto text-center"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">""</span> <span class="na">class=</span><span class="s">"avatar"</span> <span class="na">alt=</span><span class="s">""</span> <span class="na">data-role=</span><span class="s">"user-avatar"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;/div&gt;</span>
+
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"col"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"message-content"</span><span class="nt">&gt;</span>
+          <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">"mb-1"</span> <span class="na">data-role=</span><span class="s">"message-text"</span><span class="nt">&gt;&lt;/p&gt;</span>
+
+          <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"text-right"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;small</span> <span class="na">data-role=</span><span class="s">"message-date"</span><span class="nt">&gt;&lt;/small&gt;</span>
+          <span class="nt">&lt;/div&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+      <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre></div></div>
+
+<p>This snippet is going to be used as a template for each incoming message. Every time a message arrives, we will</p>
+
+<ul>
+  <li>clone this html</li>
+  <li>alter the appropriate elements’ values and</li>
+  <li>append the resulting html to the end of the chat div.</li>
+</ul>
+
+<p>Now we will create the Javascript that will do the work of subscribing and handling incoming channel data.</p>
+
+<p>Create the file <code class="highlighter-rouge">app/assets/javascripts/channels/room_channel.js</code> and add the following code:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">[data-channel-subscribe="room"]</span><span class="dl">'</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">index</span><span class="p">,</span> <span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">$element</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">element</span><span class="p">),</span>
+        <span class="nx">room_id</span> <span class="o">=</span> <span class="nx">$element</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="dl">'</span><span class="s1">room-id</span><span class="dl">'</span><span class="p">)</span>
+        <span class="nx">messageTemplate</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">[data-role="message-template"]</span><span class="dl">'</span><span class="p">);</span>
+
+    <span class="nx">$element</span><span class="p">.</span><span class="nx">animate</span><span class="p">({</span> <span class="na">scrollTop</span><span class="p">:</span> <span class="nx">$element</span><span class="p">.</span><span class="nx">prop</span><span class="p">(</span><span class="dl">"</span><span class="s2">scrollHeight</span><span class="dl">"</span><span class="p">)},</span> <span class="mi">1000</span><span class="p">)</span>        
+
+    <span class="nx">App</span><span class="p">.</span><span class="nx">cable</span><span class="p">.</span><span class="nx">subscriptions</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span>
+      <span class="p">{</span>
+        <span class="na">channel</span><span class="p">:</span> <span class="dl">"</span><span class="s2">RoomChannel</span><span class="dl">"</span><span class="p">,</span>
+        <span class="na">room</span><span class="p">:</span> <span class="nx">room_id</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="na">received</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+          <span class="kd">var</span> <span class="nx">content</span> <span class="o">=</span> <span class="nx">messageTemplate</span><span class="p">.</span><span class="nx">children</span><span class="p">().</span><span class="nx">clone</span><span class="p">(</span><span class="kc">true</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+          <span class="nx">content</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="dl">'</span><span class="s1">[data-role="user-avatar"]</span><span class="dl">'</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">src</span><span class="dl">'</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nx">user_avatar_url</span><span class="p">);</span>
+          <span class="nx">content</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="dl">'</span><span class="s1">[data-role="message-text"]</span><span class="dl">'</span><span class="p">).</span><span class="nx">text</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+          <span class="nx">content</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="dl">'</span><span class="s1">[data-role="message-date"]</span><span class="dl">'</span><span class="p">).</span><span class="nx">text</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">updated_at</span><span class="p">);</span>
+          <span class="nx">$element</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">content</span><span class="p">);</span>
+          <span class="nx">$element</span><span class="p">.</span><span class="nx">animate</span><span class="p">({</span> <span class="na">scrollTop</span><span class="p">:</span> <span class="nx">$element</span><span class="p">.</span><span class="nx">prop</span><span class="p">(</span><span class="dl">"</span><span class="s2">scrollHeight</span><span class="dl">"</span><span class="p">)},</span> <span class="mi">1000</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p><strong>Explain</strong>:</p>
+
+<ul>
+  <li>For each element that has a data attribute <code class="highlighter-rouge">channel-subscribe</code> with value <code class="highlighter-rouge">room</code>
+    <ul>
+      <li>Create a subscription to the “RoomChannel” passing the element’s <code class="highlighter-rouge">room-id</code> data attribute as a parameter with name <code class="highlighter-rouge">room</code> (remember this line of the <code class="highlighter-rouge">RoomChannel</code>: <code class="highlighter-rouge">Room.find params[:room]</code> ?)
+        <ul>
+          <li>When data is received, clone the template snippet and alter its contents based on the incoming object attributes.</li>
+          <li>Append the newly generated content to the chat div and finally</li>
+          <li>Do some animation to impress by scrolling smoothly to the bottom of the div.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="acknowledgments">Acknowledgments</h2>
+
+<p>Thank you very much for your feedback.</p>
+
+<ul>
+  <li>[1] Armando Andini - <a href="https://github.com/iridakos/rails-chat-tutorial/issues/3">N+1 queries</a></li>
+  <li>[2] Rodolfo Ruiz - <a href="https://github.com/iridakos/rails-chat-tutorial/issues/5">Coffeescript leftovers</a></li>
+  <li>[3] Felix Wolfsteller - <a href="https://github.com/iridakos/rails-chat-tutorial/issues/1">Turbolinks leftovers</a></li>
+  <li>[4] Maria Kravtsova - <a href="https://github.com/iridakos/rails-chat-tutorial/issues/2">Migration typo</a></li>
+  <li>[5][7][8] Tony Dehnke - <a href="https://github.com/iridakos/rails-chat-tutorial/issues/6">Sign up step</a>, <a href="https://github.com/iridakos/rails-chat-tutorial/issues/8">Missing step for adding model relations</a>, <a href="https://github.com/iridakos/rails-chat-tutorial/issues/7">Missing line from html code block</a></li>
+  <li>[6] keytonw - <a href="https://github.com/iridakos/rails-chat-tutorial/issues/9">Devise view missing button class</a></li>
+  <li>[9] Martin - <a href="https://github.com/iridakos/rails-chat-tutorial/issues/11">Mention order of requirements in application.js</a></li>
+  <li>[10] Sumak - <a href="https://github.com/iridakos/rails-chat-tutorial/issues/15">Remove duplicate authentication related code</a></li>
+</ul>
+
+<p>That’s all! Long post, tired cat photo.</p>
+
+<p><img src="./Creating a chat application from scratch using Rails and WebSockets_files/irida.jpg" alt="Tired cat photo"></p>
+
+<div class="alert alert-light">
+  <div class="alert-heading"><i class="fa fa-comments"></i> Code and comments</div>
+
+  You can find the code of this tutorial on <a class="alert-link" href="https://github.com/iridakos/rails-chat-tutorial"><i class="fa fa-github"></i> GitHub</a>.
+
+  <hr>
+
+  For feedback, comments, typos etc. please open an <a class="alert-link" href="https://github.com/iridakos/rails-chat-tutorial/issues">issue</a> in the repository.
+
+  <hr>
+
+  <strong>Thanks for visiting!</strong>
+</div>
+
+                </div>
+              </div>
+
+              <div class="col-12 order-first">
+                <div class="d-sm-block d-md-none mb-3">
+                  <a class=" btn btn-outline-primary d-block collapsed text-left" title="View the structure of this document" role="button" data-toggle="collapse" data-role="outline" data-content=".outline" href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#docout-mobile" data-target="#docout-mobile" aria-expanded="false" aria-controls="collapse">
+                    Table of contents
+                    <i class="fa iridakos-collapse pull-right mt-1"></i>
+                  </a>
+
+                  <div id="docout-mobile" class="collapse my-3 border rounded bg-light p-2"><ul class="docout-root-wrap"><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#introduction">Introduction</a><ul class="docout-child-wrap docout-child-wrap-2"><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#what-are-websockets">What are WebSockets</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#why-websockets">Why WebSockets</a></li></ul></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#building-the-application">Building the application</a><ul class="docout-child-wrap docout-child-wrap-2"><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#setting-up-the-environment">Setting up the environment</a><ul class="docout-child-wrap docout-child-wrap-3"><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#install-ruby">Install ruby</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#install-rails">Install rails</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#create-the-rails-application">Create the rails application</a></li></ul></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#users-and-devise">Users and devise</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#rooms-and-messages">Rooms and messages</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#adding-authentication">Adding authentication</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#add-bootstrap">Add bootstrap</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#add-simple_form">Add simple_form</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#devise-views-with-bootstrap-and-simple-form">Devise views with bootstrap and simple form</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#cleanup-unused-components">Cleanup unused components</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#adding-a-navigation-bar">Adding a navigation bar</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#room-management">Room management</a><ul class="docout-child-wrap docout-child-wrap-3"><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#room-index">Room index</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#room-newedit">Room new/edit</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#room-page">Room page</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#creating-room-messages">Creating room messages</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#displaying-room-messages">Displaying room messages</a></li></ul></li></ul></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#introducing-websockets---actioncable">Introducing WebSockets - ActionCable</a><ul class="docout-child-wrap docout-child-wrap-2"><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#install-redis">Install redis</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#configure-actioncable">Configure ActionCable</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#configure-devise-for-authenticating-websocket-connections">Configure Devise for authenticating websocket connections</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#configure-the-websocket-connection">Configure the websocket connection</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#create-the-room-channel">Create the room channel</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#broadcast-room-messages">Broadcast room messages</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#subscribe-to-the-room-stream">Subscribe to the room stream</a></li></ul></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#acknowledgments">Acknowledgments</a></li></ul></div>
+                </div>
+              </div>
+            </div>
+          
+
+          <!--googleoff: index-->
+
+
+
+
+
+
+
+
+
+<div class="post-navigation">
+  <div class="row">
+    <div class="col-12 col-md-4 my-3">
+      
+        <a class="d-block btn btn-light btn-sm h-100" href="https://iridakos.com/programming/2018/10/22/elasticsearch-bucket-aggregations" title="Elasticsearch bucket aggregations and faceted navigation - facets">
+          <strong>
+            <i class="fa fa-angle-double-left"></i> previous post
+          </strong>
+
+          <hr class="my-1">
+
+          <small>
+            Elasticsearch bucket aggregations and faceted navigation - facets
+          </small>
+        </a>
+      
+    </div>
+
+    <div class="col-12 col-md-4 offset-md-4 my-3">
+      
+        <a class="d-block btn btn-light btn-sm h-100" href="https://iridakos.com/programming/2019/04/07/dockerizing-a-rails-application" title="Dockerizing a Rails application">
+          <strong>
+            next post <i class="fa fa-angle-double-right"></i>
+          </strong>
+
+          <hr class="my-1">
+
+          <small>
+            Dockerizing a Rails application
+          </small>
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+
+<!--googleon: index-->
+
+          
+
+
+  
+    <div class="alert alert-light related-posts">
+      <h4 class="alert-heading"><i class="fa fa-hand-spock-o" aria-hidden="true"></i> My latest post</h4>
+
+      <div class="row mt-3">
+        <div class="col">
+          <a class="alert-link" href="https://iridakos.com/programming/2020/04/20/stup-cli-notes"><strong>stup - Daily notes in the terminal</strong></a>
+          <div>
+            <small>Introducing a shell tool for saving, organizing and searching daily notes from the command line</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+
+
+          
+<div class="alert alert-light related-posts">
+  <h4 class="alert-heading"><i class="fa fa-hand-o-right" aria-hidden="true"></i> Related posts</h4>
+
+  
+
+  <ul class="list-unstyled">
+  
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        <li>
+          <a class="alert-link" href="https://iridakos.com/programming/2019/04/07/dockerizing-a-rails-application"><strong>Dockerizing a Rails application</strong></a>
+          <div>
+            <small>A step by step tutorial to dockerize a Rails application and run it in Docker with PostgreSQL and Redis.</small>
+          </div>
+        </li>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        <li>
+          <a class="alert-link" href="https://iridakos.com/programming/2018/01/25/creating-a-gtk-todo-application-with-ruby"><strong>Creating a Linux Desktop application with Ruby</strong></a>
+          <div>
+            <small>A tutorial for creating a simple GTK ToDo application with Ruby</small>
+          </div>
+        </li>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  
+    
+      
+    
+      
+    
+      
+        <li>
+          <a class="alert-link" href="https://iridakos.com/programming/2013/12/07/creating-a-simple-todo-part-1"><strong>Creating a simple ToDo application with Ruby on Rails - Part 1</strong></a>
+          <div>
+            <small>First part of the tutorial creating a simple ToDo application with Ruby on Rails.</small>
+          </div>
+        </li>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  
+    
+      
+    
+      
+        <li>
+          <a class="alert-link" href="https://iridakos.com/programming/2013/11/24/saying-hello-world-with-ruby-on-rails"><strong>Saying hello world with Ruby on Rails</strong></a>
+          <div>
+            <small>This is a tutorial for creating the classic hello world application with Ruby on Rails.</small>
+          </div>
+        </li>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        <li>
+          <a class="alert-link" href="https://iridakos.com/programming/2018/03/01/bash-programmable-completion-tutorial"><strong>Creating a bash completion script</strong></a>
+          <div>
+            <small>A tutorial for adding tab completion to your scripts using the Bash Programmable Completion functionality.</small>
+          </div>
+        </li>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  
+  </ul>
+</div>
+
+
+          
+<div class="share-links">
+  <a class="btn btn-light" href="https://twitter.com/intent/tweet?text=Creating%20a%20chat%20application%20from%20scratch%20using%20Rails%20and%20WebSockets&amp;url=https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets" rel="nofollow" target="_blank" title="Share on Twitter"><i class="fa fa-twitter"></i></a>
+  <a class="btn btn-light" href="https://facebook.com/sharer.php?u=https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets" rel="nofollow" target="_blank" title="Share on Facebook"><i class="fa fa-facebook"></i></a>
+  <a class="btn btn-light" href="https://www.reddit.com/submit" onclick="window.location = &#39;https://www.reddit.com/submit?url=&#39; + encodeURIComponent(window.location); return false" title="Share on Reddit"><i class="fa fa-reddit"></i></a>
+  <a class="btn btn-light" href="mailto:?subject=Creating%20a%20chat%20application%20from%20scratch%20using%20Rails%20and%20WebSockets&amp;body=Creating%20a%20chat%20application%20from%20scratch%20using%20Rails%20and%20WebSockets:%20https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets"><i class="fa fa-envelope-o" title="Share with email"></i></a>
+</div>
+
+<div class="subscribe-links">
+  <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <i class="fa fa-rss"></i> Subscribe via RSS
+  </button>
+
+  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+    <a class="dropdown-item" href="https://iridakos.com/feed.xml">all posts</a>
+    <div role="separator" class="dropdown-divider"></div>
+    <a class="dropdown-item" href="https://iridakos.com/feeds/programming.xml">all programming related posts</a>
+    <a class="dropdown-item" href="https://iridakos.com/feeds/tutorials.xml">programming tutorials posts</a>
+    <a class="dropdown-item" href="https://iridakos.com/feeds/opensource.xml">opensource related posts</a>
+    <a class="dropdown-item" href="https://iridakos.com/feeds/ruby.xml">ruby and rails related posts</a>
+    <div role="separator" class="dropdown-divider"></div>
+    <a class="dropdown-item" href="https://iridakos.com/feeds/programming-humor.xml">programming humor</a>
+    <div role="separator" class="dropdown-divider"></div>
+    <a class="dropdown-item" href="https://iridakos.com/feeds/painting.xml">painting posts</a>
+    <div role="separator" class="dropdown-divider"></div>
+    <a class="dropdown-item" href="https://iridakos.com/feeds/cats.xml">cat photos</a>
+  </div>
+</div>
+
+        </div>
+
+        <div class="col">
+          <!--googleoff: index-->
+<div class="sidebar">
+  
+    <div class="alert alert-primary d-none d-md-block">
+      <div class="sidebar-section">
+        <a class="btn btn-warning d-block collapsed text-left" data-toggle="collapse" data-role="outline" data-content=".outline" href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#docout-sidebar" data-target="#docout-sidebar" title="View the structure of this document" role="button" aria-expanded="false" aria-controls="collapse">
+          Table of contents
+          <i class="fa iridakos-collapse pull-right mt-1"></i>
+        </a>
+
+        <div class="section-content">
+          <div id="docout-sidebar" class="collapse mt-2 p-2"><ul class="docout-root-wrap"><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#introduction">Introduction</a><ul class="docout-child-wrap docout-child-wrap-2"><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#what-are-websockets">What are WebSockets</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#why-websockets">Why WebSockets</a></li></ul></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#building-the-application">Building the application</a><ul class="docout-child-wrap docout-child-wrap-2"><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#setting-up-the-environment">Setting up the environment</a><ul class="docout-child-wrap docout-child-wrap-3"><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#install-ruby">Install ruby</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#install-rails">Install rails</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#create-the-rails-application">Create the rails application</a></li></ul></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#users-and-devise">Users and devise</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#rooms-and-messages">Rooms and messages</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#adding-authentication">Adding authentication</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#add-bootstrap">Add bootstrap</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#add-simple_form">Add simple_form</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#devise-views-with-bootstrap-and-simple-form">Devise views with bootstrap and simple form</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#cleanup-unused-components">Cleanup unused components</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#adding-a-navigation-bar">Adding a navigation bar</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#room-management">Room management</a><ul class="docout-child-wrap docout-child-wrap-3"><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#room-index">Room index</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#room-newedit">Room new/edit</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#room-page">Room page</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#creating-room-messages">Creating room messages</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#displaying-room-messages">Displaying room messages</a></li></ul></li></ul></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#introducing-websockets---actioncable">Introducing WebSockets - ActionCable</a><ul class="docout-child-wrap docout-child-wrap-2"><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#install-redis">Install redis</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#configure-actioncable">Configure ActionCable</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#configure-devise-for-authenticating-websocket-connections">Configure Devise for authenticating websocket connections</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#configure-the-websocket-connection">Configure the websocket connection</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#create-the-room-channel">Create the room channel</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#broadcast-room-messages">Broadcast room messages</a></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#subscribe-to-the-room-stream">Subscribe to the room stream</a></li></ul></li><li><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#acknowledgments">Acknowledgments</a></li></ul></div>
+        </div>
+      </div>
+    </div>
+  
+
+  
+
+  <div class="alert alert-primary">
+  <div class="sidebar-section">
+    <div class="section-title">
+      <h4><i class="fa fa-hand-spock-o"></i> featured posts</h4>
+    </div>
+
+    <div class="section-content">
+      
+      
+        
+          <div class="section-item">
+            <div class="float-right ml-1">
+              
+                <span class="featured-hacker-news" title="Featured in Hacker News" data-toggle="tooltip"><i class="fa fa-hacker-news"></i></span>
+              
+                <span class="featured-opensource-com" title="Featured in opensource.com" data-toggle="tooltip"><i class="fa fa-linux"></i></span>
+              
+                <span class="featured-hackernewsletter" title="Featured in hackernewsletter" data-toggle="tooltip"><i class="fa fa-envelope"></i></span>
+              
+            </div>
+            <a href="https://iridakos.com/programming/2018/03/01/bash-programmable-completion-tutorial">Creating a bash completion script</a>
+             <div class="text-muted smaller">
+               A tutorial for adding tab completion to your scripts using the Bash Programmable Completion functionality.
+             </div>
+          </div>
+        
+      
+        
+          <div class="section-item">
+            <div class="float-right ml-1">
+              
+                <span class="featured-hacker-news" title="Featured in Hacker News" data-toggle="tooltip"><i class="fa fa-hacker-news"></i></span>
+              
+                <span class="featured-ruby-weekly" title="Featured in Ruby Weekly" data-toggle="tooltip"><i class="fa fa-diamond"></i></span>
+              
+                <span class="featured-opensource-com" title="Featured in opensource.com" data-toggle="tooltip"><i class="fa fa-linux"></i></span>
+              
+            </div>
+            <a href="https://iridakos.com/programming/2018/01/25/creating-a-gtk-todo-application-with-ruby">Creating a Linux Desktop application with Ruby</a>
+             <div class="text-muted smaller">
+               A tutorial for creating a simple GTK ToDo application with Ruby
+             </div>
+          </div>
+        
+      
+        
+          <div class="section-item">
+            <div class="float-right ml-1">
+              
+                <span class="featured-farnam-street" title="Featured in Farnam Street" data-toggle="tooltip">fs <i class="fa fa-envelope"></i></span>
+              
+                <span class="featured-hacker-news" title="Featured in Hacker News" data-toggle="tooltip"><i class="fa fa-hacker-news"></i></span>
+              
+                <span class="featured-betterldevlink" title="Featured in Better Dev Link" data-toggle="tooltip"><i class="fa fa-envelope"></i></span>
+              
+            </div>
+            <a href="https://iridakos.com/programming/2019/06/26/composing-better-emails">How to write better emails</a>
+             <div class="text-muted smaller">
+               Tips for composing effective emails avoiding misunderstandings with examples from the software development world.
+             </div>
+          </div>
+        
+      
+        
+          <div class="section-item">
+            <div class="float-right ml-1">
+              
+                <span class="featured-hacker-news" title="Featured in Hacker News" data-toggle="tooltip"><i class="fa fa-hacker-news"></i></span>
+              
+                <span class="featured-hackernewsletter" title="Featured in hackernewsletter" data-toggle="tooltip"><i class="fa fa-envelope"></i></span>
+              
+                <span class="featured-opensource-com" title="Featured in opensource.com" data-toggle="tooltip"><i class="fa fa-linux"></i></span>
+              
+            </div>
+            <a href="https://iridakos.com/programming/2019/05/16/remove-duplicate-lines-preserving-order-linux">How to remove duplicate lines from files preserving their order</a>
+             <div class="text-muted smaller">
+               How to remove duplicate lines of a file in Linux without sorting or changing their order (awk one-liner explained).
+             </div>
+          </div>
+        
+      
+        
+          <div class="section-item">
+            <div class="float-right ml-1">
+              
+                <span class="featured-ruby-weekly" title="Featured in Ruby Weekly" data-toggle="tooltip"><i class="fa fa-diamond"></i></span>
+              
+            </div>
+            <a href="https://iridakos.com/programming/2016/04/01/duckrails-guide">DuckRails - Open source development tool for mocking API endpoints</a>
+             <div class="text-muted smaller">
+               An introduction and a guide for installing and using DuckRails, a development tool for mocking API endpoints easily and dynamically. Docker image available.
+             </div>
+          </div>
+        
+      
+
+      <div class="section-item">
+        <a href="https://iridakos.com/programming/featured">View all featured posts</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  
+<div class="alert alert-primary">
+  <div class="sidebar-section">
+    <div class="section-title">
+      <h4><i class="fa fa-bullhorn"></i> recent posts</h4>
+    </div>
+
+    
+
+    <div class="section-content">
+      
+          <div class="section-item">
+            <a href="https://iridakos.com/programming/2020/04/20/stup-cli-notes">stup - Daily notes in the terminal</a>
+            <div class="text-muted smaller">Introducing a shell tool for saving, organizing and searching daily notes from the command line</div>
+          </div>
+      
+          <div class="section-item">
+            <a href="https://iridakos.com/programming/2020/02/06/shell-palindrome-dates">Find palindrome dates in the Linux command line - explained</a>
+            <div class="text-muted smaller">Explaining how to find palindrome dates using a shell command in Linux</div>
+          </div>
+      
+          <div class="section-item">
+            <a href="https://iridakos.com/cats/2020/01/23/goodbye-irida">Goodbye Irida</a>
+            <div class="text-muted smaller">A goodbye to my beloved cat</div>
+          </div>
+      
+    </div>
+  </div>
+</div>
+
+
+
+  <div class="alert alert-primary">
+  <div class="sidebar-section">
+    <div class="section-title">
+      <h4>
+        <i class="fa fa-github"></i> code
+      </h4>
+
+      <div class="float-right">
+
+      </div>
+    </div>
+
+    <div class="section-content">
+      <div class="section-item">
+        <a href="https://github.com/iridakos/goto">goto</a>: a tool for navigating to aliased directories in the shell with auto complete
+      </div>
+
+      <div class="section-item">
+        <a href="https://github.com/iridakos/elman">elman</a>: a script for full text searching Linux man pages with Elasticsearch
+      </div>
+
+      <div class="section-item">
+        <a href="https://github.com/iridakos/duckrails">DuckRails</a>
+        version <span class="important">2.1.5</span> is out <img src="./Creating a chat application from scratch using Rails and WebSockets_files/duckrails.png" class="logo"> (<a href="https://github.com/iridakos/duckrails/wiki/Setup-DuckRails-via-Docker" target="_blank">docker image available</a>)
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  
+
+
+  
+    <div class="alert alert-primary d-none d-md-block">
+      <div class="sidebar-section">
+        <div class="section-content mt-2">
+          
+<div class="share-links">
+  <a class="btn btn-light" href="https://twitter.com/intent/tweet?text=Creating%20a%20chat%20application%20from%20scratch%20using%20Rails%20and%20WebSockets&amp;url=https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets" rel="nofollow" target="_blank" title="Share on Twitter"><i class="fa fa-twitter"></i></a>
+  <a class="btn btn-light" href="https://facebook.com/sharer.php?u=https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets" rel="nofollow" target="_blank" title="Share on Facebook"><i class="fa fa-facebook"></i></a>
+  <a class="btn btn-light" href="https://www.reddit.com/submit" onclick="window.location = &#39;https://www.reddit.com/submit?url=&#39; + encodeURIComponent(window.location); return false" title="Share on Reddit"><i class="fa fa-reddit"></i></a>
+  <a class="btn btn-light" href="mailto:?subject=Creating%20a%20chat%20application%20from%20scratch%20using%20Rails%20and%20WebSockets&amp;body=Creating%20a%20chat%20application%20from%20scratch%20using%20Rails%20and%20WebSockets:%20https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets"><i class="fa fa-envelope-o" title="Share with email"></i></a>
+</div>
+
+<div class="subscribe-links">
+  <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <i class="fa fa-rss"></i> Subscribe via RSS
+  </button>
+
+  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+    <a class="dropdown-item" href="https://iridakos.com/feed.xml">all posts</a>
+    <div role="separator" class="dropdown-divider"></div>
+    <a class="dropdown-item" href="https://iridakos.com/feeds/programming.xml">all programming related posts</a>
+    <a class="dropdown-item" href="https://iridakos.com/feeds/tutorials.xml">programming tutorials posts</a>
+    <a class="dropdown-item" href="https://iridakos.com/feeds/opensource.xml">opensource related posts</a>
+    <a class="dropdown-item" href="https://iridakos.com/feeds/ruby.xml">ruby and rails related posts</a>
+    <div role="separator" class="dropdown-divider"></div>
+    <a class="dropdown-item" href="https://iridakos.com/feeds/programming-humor.xml">programming humor</a>
+    <div role="separator" class="dropdown-divider"></div>
+    <a class="dropdown-item" href="https://iridakos.com/feeds/painting.xml">painting posts</a>
+    <div role="separator" class="dropdown-divider"></div>
+    <a class="dropdown-item" href="https://iridakos.com/feeds/cats.xml">cat photos</a>
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+  
+</div>
+<!--googleon: index-->
+        </div>
+      </div>
+    </div>
+
+
+    <div class="modal fade" id="image-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">iridakos images preview</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+
+            <div class="modal-body text-center">
+                <div class="image-container">
+                    <img class="image">
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <footer class="footer">
+  <div class="container-fluid no-gutters">
+    <div class="row">
+      <div class="col-12">
+        <hr>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <div class="brand mb-1">
+          <a href="https://iridakos.com/">iridakos</a>
+        </div>
+
+        <div class="license">
+          <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">iridakos</span> by
+          <a xmlns:cc="http://creativecommons.org/ns#" href="https://iridakos.com/about/" property="cc:attributionName" rel="cc:attributionURL" class="">Lazarus Lazaridis</a> is licensed under a <a class="" rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>.
+        </div>
+
+        <div>
+          <a class="" rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="Creative Commons License" style="border-width:0" src="./Creating a chat application from scratch using Rails and WebSockets_files/license.png"></a>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <div class="my-4">
+          <a class="btn btn-light btn-sm mr-1" href="https://www.github.com/iridakos/"><i class="fa fa-github" aria-hidden="true"></i> GitHub</a>
+          <a class="btn btn-light btn-sm mr-1" href="https://www.twitter.com/lazaru_s/"><i class="fa fa-twitter" aria-hidden="true"></i> Twitter</a>
+          <a class="btn btn-light btn-sm mr-1" href="https://www.linkedin.com/in/iridakos/"><i class="fa fa-linkedin" aria-hidden="true"></i> LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+    
+<script src="./Creating a chat application from scratch using Rails and WebSockets_files/jquery.min.js"></script>
+<script src="./Creating a chat application from scratch using Rails and WebSockets_files/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="./Creating a chat application from scratch using Rails and WebSockets_files/bootstrap.min.js" type="text/javascript"></script>
+<script src="./Creating a chat application from scratch using Rails and WebSockets_files/docout.js" type="text/javascript"></script>
+<script src="./Creating a chat application from scratch using Rails and WebSockets_files/iridakos.js" type="text/javascript"></script>
+<script src="./Creating a chat application from scratch using Rails and WebSockets_files/search.js" type="text/javascript"></script>
+
+
+
+
+  
+
+<div id="sqseobar2" class="sqseobar2-white sqseobar2-vertical-small sqseobar2-vertical"><div class="sqseobar2-inner"><div class="sqseobar2-vertical-top-block"><img src="chrome-extension://akdgnmcogleenhbclghghlkkdndkjdjc/static/svg/seoquake-icon.svg" class="sqseobar2-logo"><button class="sqseobar2-button-close" title="Close panel"></button><button class="sqseobar2-button-configure" title="Configure panel"></button><button class="sqseobar2-button-toggle sqseobar2-button-down" title="Toggle panel"></button></div><div class="sqseobar2-scroll-block sqsll-content" datasqscrollheight="0" style="height: 0px;"><div class="sqsll-container"><div class="sqseobar2-specials-container"><a class="sqseobar2-link sqseobar2-link-pageinfo"><span>Summary report</span></a><a class="sqseobar2-link sqseobar2-link-diagnosis"><span>Diagnosis</span></a><a class="sqseobar2-link sqseobar2-link-density"><span>Density</span></a><a class="sqseobar2-link sqseobar2-link-external"><span>External links</span><span class="sqseobar2-link-value">45</span></a><a class="sqseobar2-link sqseobar2-link-internal"><span>Internal links</span><span class="sqseobar2-link-value">94</span></a><a class="sqseobar2-link sqseobar2-link-robots sqseobar2-link-diagnosis-good" target="_blank" href="https://iridakos.com/robots.txt"><span>Robots.txt</span><span class="sqseobar2-link-value" title="Detected and ok">ok</span></a><a class="sqseobar2-link sqseobar2-link-sitemap sqseobar2-link-diagnosis-good" target="_blank" href="https://iridakos.com/sitemap.xml"><span>Sitemap.xml</span><span class="sqseobar2-link-value" title="Detected and ok">ok</span></a><a class="sqseobar2-link sqseobar2-link-siteaudit" href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#"><span>Site audit</span><span class="sqseobar2-link-value">n/a</span></a></div><div class="sqseobar2-parameters-container"><div class="sqseobar2-parameters-header">Page</div><div class="sqseobar2-parameterItemInline"><span class="sqicn sqicn-google"></span><span class="sqseobar2-parameterItemInline-title">Google cachedate</span><a href="https://webcache.googleusercontent.com/search?hl=en&amp;gl=en&amp;ie=UTF-8&amp;oe=UTF-8&amp;q=cache:https%3A%2F%2Firidakos.com%2Fprogramming%2F2019%2F04%2F04%2Fcreating-chat-application-rails-websockets" target="_blank" class="seoquake-params-request">10 Jul 2020</a></div><div class="sqseobar2-parameterItemInline"><span class="sqicn sqicn-facebook"></span><span class="sqseobar2-parameterItemInline-title">Facebook likes</span><a href="https://www.facebook.com/v2.5/plugins/like.php?layout=button_count&amp;href=https%3A%2F%2Firidakos.com%2Fprogramming%2F2019%2F04%2F04%2Fcreating-chat-application-rails-websockets" target="_blank" class="seoquake-params-request">0</a></div><div class="sqseobar2-parameterItemInline"><span class="sqicn sqicn-source"></span><a href="view-source:https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets" target="_blank" class="seoquake-params-request">source</a></div><div class="sqseobar2-parameterItemInline"><span class="sqicn sqicn-pinterest"></span><span class="sqseobar2-parameterItemInline-title">Pinterest Pin count</span><a href="https://api.pinterest.com/v1/urls/count.json?callback=r&amp;url=https%3A%2F%2Firidakos.com%2Fprogramming%2F2019%2F04%2F04%2Fcreating-chat-application-rails-websockets" target="_blank" class="seoquake-params-request">0</a></div><div class="sqseobar2-parameterItemInline"><span class="sqicn sqicn-linkedin"></span><span class="sqseobar2-parameterItemInline-title">Linkedin share count</span><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#" target="_blank" class="seoquake-params-request"><i class="sqseobar2-icon sqseobar2-load"></i></a></div><div class="sqseobar2-parameters-header">Domain</div><div class="sqseobar2-parameterItemInline"><span class="sqicn sqicn-google"></span><span class="sqseobar2-parameterItemInline-title">Google index</span><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#" target="_blank" class="seoquake-params-request"><i class="sqseobar2-icon sqseobar2-load"></i></a></div><div class="sqseobar2-parameterItemInline"><span class="sqicn sqicn-yahoo"></span><span class="sqseobar2-parameterItemInline-title">Yahoo index</span><a href="https://search.yahoo.com/search?p=.&amp;vs=iridakos.com" target="_blank" class="seoquake-params-request">3.96K</a></div><div class="sqseobar2-parameterItemInline"><span class="sqicn sqicn-bing"></span><span class="sqseobar2-parameterItemInline-title">Bing index</span><a href="https://www.bing.com/search?q=site%3Airidakos.com&amp;FORM=QBRE" target="_blank" class="seoquake-params-request">1.63K</a></div><div class="sqseobar2-parameterItemInline"><span class="sqicn sqicn-alexa"></span><span class="sqseobar2-parameterItemInline-title">Alexa rank</span><a href="https://www.alexa.com/siteinfo/iridakos.com" target="_blank" class="seoquake-params-request">617K</a></div><div class="sqseobar2-parameterItemInline"><span class="sqicn sqicn-webarchive"></span><span class="sqseobar2-parameterItemInline-title">Webarchive age</span><a href="https://web.archive.org/web/*/https://iridakos.com" target="_blank" class="seoquake-params-request">2016|04|30</a></div><div class="sqseobar2-parameterItemInline"><span class="sqicn sqicn-user"></span><a href="https://whois.domaintools.com/iridakos.com?utm_source=seoquake&amp;utm_medium=seoquake&amp;utm_campaign=seoquake&amp;ref=174537735" target="_blank" class="seoquake-params-request">whois</a></div><div class="sqseobar2-parameterItemInline"><span class="sqicn sqicn-semrush"></span><span class="sqseobar2-parameterItemInline-title">SEMrush Rank</span><a href="https://www.semrush.com/info/iridakos.com?ref=174537735&amp;utm_source=seoquake&amp;utm_medium=toolbar&amp;utm_campaign=params" target="_blank" class="seoquake-params-request">1.30M</a></div><div class="sqseobar2-parameterItemInline"><span class="sqicn sqicn-semrush"></span><span class="sqseobar2-parameterItemInline-title">SEMrush SE Traffic</span><a href="https://www.semrush.com/info/iridakos.com?ref=174537735&amp;utm_source=seoquake&amp;utm_medium=toolbar&amp;utm_campaign=params" target="_blank" class="seoquake-params-request">599</a></div><div class="sqseobar2-parameterItemInline"><span class="sqicn sqicn-semrush"></span><span class="sqseobar2-parameterItemInline-title">SEMrush SE Traffic price</span><a href="https://www.semrush.com/info/iridakos.com?ref=174537735&amp;utm_source=seoquake&amp;utm_medium=toolbar&amp;utm_campaign=params" target="_blank" class="seoquake-params-request">232</a></div><div class="sqseobar2-parameterItemInline"><span class="sqicn sqicn-semrush"></span><span class="sqseobar2-parameterItemInline-title">SEMrush advertiser display ads</span><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#" target="_blank" class="seoquake-params-request"><i class="sqseobar2-icon sqseobar2-load"></i></a></div><div class="sqseobar2-parameterItemInline"><span class="sqicn sqicn-semrush"></span><span class="sqseobar2-parameterItemInline-title">SEMrush publisher display ads</span><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#" target="_blank" class="seoquake-params-request"><i class="sqseobar2-icon sqseobar2-load"></i></a></div><div class="sqseobar2-parameterItemInline"><span class="sqicn sqicn-yandex"></span><span class="sqseobar2-parameterItemInline-title">Yandex IKS</span><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#" target="_blank" class="seoquake-params-request"><i class="sqseobar2-icon sqseobar2-load"></i></a></div><div class="sqseobar2-parameterItemInline"><span class="sqicn sqicn-yandex"></span><span class="sqseobar2-parameterItemInline-title">Yandex index</span><a href="https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets#" target="_blank" class="seoquake-params-request"><i class="sqseobar2-icon sqseobar2-load"></i></a></div><div class="sqseobar2-parameterItemInline"><span class="sqicn sqicn-baidu"></span><span class="sqseobar2-parameterItemInline-title">Baidu index</span><a href="https://www.baidu.com/s?wd=site%3Airidakos.com&amp;cl=3" target="_blank" class="seoquake-params-request">1</a></div><div class="sqseobar2-parameters-header">Backlinks</div><div class="sqseobar2-parameterItemInline"><span class="sqicn sqicn-semrush"></span><span class="sqseobar2-parameterItemInline-title">SEMrush backlinks</span><a href="https://www.semrush.com/analytics/backlinks/backlinks/?q=https%3A%2F%2Firidakos.com%2Fprogramming%2F2019%2F04%2F04%2Fcreating-chat-application-rails-websockets&amp;searchType=url?utm_source=seoquake&amp;utm_medium=toolbar&amp;utm_campaign=params&amp;ref=174537735" target="_blank" class="seoquake-params-request">57</a></div><div class="sqseobar2-parameterItemInline"><span class="sqicn sqicn-semrush"></span><span class="sqseobar2-parameterItemInline-title">SEMrush subdomain backlinks</span><a href="https://www.semrush.com/analytics/backlinks/backlinks/iridakos.com:domain?utm_source=seoquake&amp;utm_medium=toolbar&amp;utm_campaign=params&amp;ref=174537735" target="_blank" class="seoquake-params-request">51.0K</a></div><div class="sqseobar2-parameterItemInline"><span class="sqicn sqicn-semrush"></span><span class="sqseobar2-parameterItemInline-title">SEMrush root domain backlinks</span><a href="https://www.semrush.com/analytics/backlinks/backlinks/iridakos.com:root_domain?utm_source=seoquake&amp;utm_medium=toolbar&amp;utm_campaign=params&amp;ref=174537735" target="_blank" class="seoquake-params-request">51.0K</a></div></div></div><div class="sqsll-scroll"><div class="sqsll-scroll-bar"></div></div></div></div></div><span style="border-radius: 3px !important; text-indent: 20px !important; width: auto !important; padding: 0px 4px 0px 0px !important; text-align: center !important; font: bold 11px / 20px &quot;Helvetica Neue&quot;, Helvetica, sans-serif !important; color: rgb(255, 255, 255) !important; background: url(&quot;data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMzBweCIgd2lkdGg9IjMwcHgiIHZpZXdCb3g9Ii0xIC0xIDMxIDMxIj48Zz48cGF0aCBkPSJNMjkuNDQ5LDE0LjY2MiBDMjkuNDQ5LDIyLjcyMiAyMi44NjgsMjkuMjU2IDE0Ljc1LDI5LjI1NiBDNi42MzIsMjkuMjU2IDAuMDUxLDIyLjcyMiAwLjA1MSwxNC42NjIgQzAuMDUxLDYuNjAxIDYuNjMyLDAuMDY3IDE0Ljc1LDAuMDY3IEMyMi44NjgsMC4wNjcgMjkuNDQ5LDYuNjAxIDI5LjQ0OSwxNC42NjIiIGZpbGw9IiNmZmYiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxIj48L3BhdGg+PHBhdGggZD0iTTE0LjczMywxLjY4NiBDNy41MTYsMS42ODYgMS42NjUsNy40OTUgMS42NjUsMTQuNjYyIEMxLjY2NSwyMC4xNTkgNS4xMDksMjQuODU0IDkuOTcsMjYuNzQ0IEM5Ljg1NiwyNS43MTggOS43NTMsMjQuMTQzIDEwLjAxNiwyMy4wMjIgQzEwLjI1MywyMi4wMSAxMS41NDgsMTYuNTcyIDExLjU0OCwxNi41NzIgQzExLjU0OCwxNi41NzIgMTEuMTU3LDE1Ljc5NSAxMS4xNTcsMTQuNjQ2IEMxMS4xNTcsMTIuODQyIDEyLjIxMSwxMS40OTUgMTMuNTIyLDExLjQ5NSBDMTQuNjM3LDExLjQ5NSAxNS4xNzUsMTIuMzI2IDE1LjE3NSwxMy4zMjMgQzE1LjE3NSwxNC40MzYgMTQuNDYyLDE2LjEgMTQuMDkzLDE3LjY0MyBDMTMuNzg1LDE4LjkzNSAxNC43NDUsMTkuOTg4IDE2LjAyOCwxOS45ODggQzE4LjM1MSwxOS45ODggMjAuMTM2LDE3LjU1NiAyMC4xMzYsMTQuMDQ2IEMyMC4xMzYsMTAuOTM5IDE3Ljg4OCw4Ljc2NyAxNC42NzgsOC43NjcgQzEwLjk1OSw4Ljc2NyA4Ljc3NywxMS41MzYgOC43NzcsMTQuMzk4IEM4Ljc3NywxNS41MTMgOS4yMSwxNi43MDkgOS43NDksMTcuMzU5IEM5Ljg1NiwxNy40ODggOS44NzIsMTcuNiA5Ljg0LDE3LjczMSBDOS43NDEsMTguMTQxIDkuNTIsMTkuMDIzIDkuNDc3LDE5LjIwMyBDOS40MiwxOS40NCA5LjI4OCwxOS40OTEgOS4wNCwxOS4zNzYgQzcuNDA4LDE4LjYyMiA2LjM4NywxNi4yNTIgNi4zODcsMTQuMzQ5IEM2LjM4NywxMC4yNTYgOS4zODMsNi40OTcgMTUuMDIyLDYuNDk3IEMxOS41NTUsNi40OTcgMjMuMDc4LDkuNzA1IDIzLjA3OCwxMy45OTEgQzIzLjA3OCwxOC40NjMgMjAuMjM5LDIyLjA2MiAxNi4yOTcsMjIuMDYyIEMxNC45NzMsMjIuMDYyIDEzLjcyOCwyMS4zNzkgMTMuMzAyLDIwLjU3MiBDMTMuMzAyLDIwLjU3MiAxMi42NDcsMjMuMDUgMTIuNDg4LDIzLjY1NyBDMTIuMTkzLDI0Ljc4NCAxMS4zOTYsMjYuMTk2IDEwLjg2MywyNy4wNTggQzEyLjA4NiwyNy40MzQgMTMuMzg2LDI3LjYzNyAxNC43MzMsMjcuNjM3IEMyMS45NSwyNy42MzcgMjcuODAxLDIxLjgyOCAyNy44MDEsMTQuNjYyIEMyNy44MDEsNy40OTUgMjEuOTUsMS42ODYgMTQuNzMzLDEuNjg2IiBmaWxsPSIjZTYwMDIzIj48L3BhdGg+PC9nPjwvc3ZnPg==&quot;) 3px 50% / 14px 14px no-repeat rgb(230, 0, 35) !important; position: absolute !important; opacity: 1 !important; z-index: 8675309 !important; display: none; cursor: pointer !important; border: none !important; -webkit-font-smoothing: antialiased !important; top: 857px; left: 377.5px;">Save</span><span style="border-radius: 12px; width: 24px !important; height: 24px !important; background: url(&quot;data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pjxzdmcgd2lkdGg9IjI0cHgiIGhlaWdodD0iMjRweCIgdmlld0JveD0iMCAwIDI0IDI0IiB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPjxkZWZzPjxtYXNrIGlkPSJtIj48cmVjdCBmaWxsPSIjZmZmIiB4PSIwIiB5PSIwIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHJ4PSI2IiByeT0iNiIvPjxyZWN0IGZpbGw9IiMwMDAiIHg9IjUiIHk9IjUiIHdpZHRoPSIxNCIgaGVpZ2h0PSIxNCIgcng9IjEiIHJ5PSIxIi8+PHJlY3QgZmlsbD0iIzAwMCIgeD0iMTAiIHk9IjAiIHdpZHRoPSI0IiBoZWlnaHQ9IjI0Ii8+PHJlY3QgZmlsbD0iIzAwMCIgeD0iMCIgeT0iMTAiIHdpZHRoPSIyNCIgaGVpZ2h0PSI0Ii8+PC9tYXNrPjwvZGVmcz48cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIGZpbGw9IiNmZmYiIG1hc2s9InVybCgjbSkiLz48L3N2Zz4=&quot;) 50% 50% / 14px 14px no-repeat rgba(0, 0, 0, 0.4) !important; position: absolute !important; opacity: 1 !important; z-index: 8675309 !important; display: none; cursor: pointer !important; border: none !important; top: 857px; left: 1205.5px;"></span></body></html>

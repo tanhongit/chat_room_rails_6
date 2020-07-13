@@ -4388,3 +4388,160 @@ Completed 204 No Content in 27ms (ActiveRecord: 6.4ms | Allocations: 6583)
 
 RoomChannel transmitting {"id"=>34, "room_id"=>1, "user_id"=>1, "message"=>"tẻwytery", "created_at"=>"2020-07-13T11:01:55.640Z", "updated_at"=>"2020-07-13T11:01:55.640Z", "user_avatar_url"=>"https://gravatar.com/avatar/714601de5d25c8adc9616c254891fe7d.png"} (via streamed from room:Z2lkOi8vY2hhdC1yb29tLXJhaWxzNi9Sb29tLzE)
 RoomChannel transmitting {"id"=>34, "room_id"=>1, "user_id"=>1, "message"=>"tẻwytery", "created_at"=>"2020-07-13T11:01:55.640Z", "updated_at"=>"2020-07-13T11:01:55.640Z", "user_avatar_url"=>"https://gravatar.com/avatar/714601de5d25c8adc9616c254891fe7d.png"} (via streamed from room:Z2lkOi8vY2hhdC1yb29tLXJhaWxzNi9Sb29tLzE)
+Started POST "/room_messages" for ::1 at 2020-07-13 18:11:01 +0700
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+Processing by RoomMessagesController#create as JS
+  Parameters: {"room_message"=>{"message"=>"sghrtedsgr", "room_id"=>"1"}, "commit"=>"Send"}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  [1m[36mRoom Load (0.2ms)[0m  [1m[34mSELECT "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/room_messages_controller.rb:15:in `load_entities'
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/room_messages_controller.rb:5:in `create'
+  [1m[36mRoomMessage Create (0.3ms)[0m  [1m[32mINSERT INTO "room_messages" ("room_id", "user_id", "message", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["room_id", 1], ["user_id", 2], ["message", "sghrtedsgr"], ["created_at", "2020-07-13 11:11:01.647685"], ["updated_at", "2020-07-13 11:11:01.647685"]]
+  ↳ app/controllers/room_messages_controller.rb:5:in `create'
+  [1m[35m (6.4ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/room_messages_controller.rb:5:in `create'
+[ActionCable] Broadcasting to room:Z2lkOi8vY2hhdC1yb29tLXJhaWxzNi9Sb29tLzE: #<RoomMessage id: 35, room_id: 1, user_id: 2, message: "sghrtedsgr", created_at: "2020-07-13 11:11:01", updated_at: "2020-07-13 11:11:01">
+No template found for RoomMessagesController#create, rendering head :no_content
+RoomChannel transmitting {"id"=>35, "room_id"=>1, "user_id"=>2, "message"=>"sghrtedsgr", "created_at"=>"2020-07-13T11:11:01.647Z", "updated_at"=>"2020-07-13T11:11:01.647Z", "user_avatar_url"=>"https://gravatar.com/avatar/138eb670df1465d11e9599bf5df021ce.png"} (via streamed from room:Z2lkOi8vY2hhdC1yb29tLXJhaWxzNi9Sb29tLzE)
+Completed 204 No Content in 21ms (ActiveRecord: 7.2ms | Allocations: 6774)
+
+
+RoomChannel transmitting {"id"=>35, "room_id"=>1, "user_id"=>2, "message"=>"sghrtedsgr", "created_at"=>"2020-07-13T11:11:01.647Z", "updated_at"=>"2020-07-13T11:11:01.647Z", "user_avatar_url"=>"https://gravatar.com/avatar/138eb670df1465d11e9599bf5df021ce.png"} (via streamed from room:Z2lkOi8vY2hhdC1yb29tLXJhaWxzNi9Sb29tLzE)
+Started POST "/room_messages" for ::1 at 2020-07-13 18:11:05 +0700
+Processing by RoomMessagesController#create as JS
+  Parameters: {"room_message"=>{"message"=>"3w54354ư54", "room_id"=>"1"}, "commit"=>"Send"}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mRoom Load (0.1ms)[0m  [1m[34mSELECT "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/room_messages_controller.rb:15:in `load_entities'
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/room_messages_controller.rb:5:in `create'
+  [1m[36mRoomMessage Create (0.3ms)[0m  [1m[32mINSERT INTO "room_messages" ("room_id", "user_id", "message", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["room_id", 1], ["user_id", 1], ["message", "3w54354ư54"], ["created_at", "2020-07-13 11:11:05.488450"], ["updated_at", "2020-07-13 11:11:05.488450"]]
+  ↳ app/controllers/room_messages_controller.rb:5:in `create'
+  [1m[35m (6.4ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/room_messages_controller.rb:5:in `create'
+[ActionCable] Broadcasting to room:Z2lkOi8vY2hhdC1yb29tLXJhaWxzNi9Sb29tLzE: #<RoomMessage id: 36, room_id: 1, user_id: 1, message: "3w54354ư54", created_at: "2020-07-13 11:11:05", updated_at: "2020-07-13 11:11:05">
+No template found for RoomMessagesController#create, rendering head :no_content
+RoomChannel transmitting {"id"=>36, "room_id"=>1, "user_id"=>1, "message"=>"3w54354ư54", "created_at"=>"2020-07-13T11:11:05.488Z", "updated_at"=>"2020-07-13T11:11:05.488Z", "user_avatar_url"=>"https://gravatar.com/avatar/714601de5d25c8adc9616c254891fe7d.png"} (via streamed from room:Z2lkOi8vY2hhdC1yb29tLXJhaWxzNi9Sb29tLzE)
+RoomChannel transmitting {"id"=>36, "room_id"=>1, "user_id"=>1, "message"=>"3w54354ư54", "created_at"=>"2020-07-13T11:11:05.488Z", "updated_at"=>"2020-07-13T11:11:05.488Z", "user_avatar_url"=>"https://gravatar.com/avatar/714601de5d25c8adc9616c254891fe7d.png"} (via streamed from room:Z2lkOi8vY2hhdC1yb29tLXJhaWxzNi9Sb29tLzE)
+Completed 204 No Content in 20ms (ActiveRecord: 7.0ms | Allocations: 6870)
+
+
+Started GET "/rooms/2" for ::1 at 2020-07-13 18:11:07 +0700
+Processing by RoomsController#show as HTML
+  Parameters: {"id"=>"2"}
+  [1m[36mUser Load (0.9ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mRoom Load (0.2ms)[0m  [1m[34mSELECT "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/rooms_controller.rb:47:in `load_entities'
+  Rendering rooms/show.html.erb within layouts/application
+  [1m[36mRoom Load (0.5ms)[0m  [1m[34mSELECT "rooms".* FROM "rooms"[0m
+  ↳ app/views/rooms/_rooms.html.erb:7
+  Rendered rooms/_rooms.html.erb (Duration: 3.0ms | Allocations: 770)
+  [1m[36mRoomMessage Load (0.3ms)[0m  [1m[34mSELECT "room_messages".* FROM "room_messages" WHERE "room_messages"."room_id" = ?[0m  [["room_id", 2]]
+  ↳ app/views/rooms/show.html.erb:12
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ?[0m  [["id", 1]]
+  ↳ app/views/rooms/show.html.erb:12
+  Rendered rooms/show.html.erb within layouts/application (Duration: 18.9ms | Allocations: 7563)
+  Rendered shared/_navigation_bar.html.erb (Duration: 0.2ms | Allocations: 77)
+Completed 200 OK in 44ms (Views: 31.9ms | ActiveRecord: 2.0ms | Allocations: 15924)
+
+
+Finished "/cable/" [WebSocket] for ::1 at 2020-07-13 18:11:07 +0700
+RoomChannel stopped streaming from room:Z2lkOi8vY2hhdC1yb29tLXJhaWxzNi9Sb29tLzE
+Started GET "/cable" for ::1 at 2020-07-13 18:11:08 +0700
+Started GET "/cable/" [WebSocket] for ::1 at 2020-07-13 18:11:08 +0700
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/channels/application_cable/connection.rb:12:in `find_verified_user'
+Registered connection (Z2lkOi8vY2hhdC1yb29tLXJhaWxzNi9Vc2VyLzE)
+  [1m[36mRoom Load (0.1ms)[0m  [1m[34mSELECT "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/channels/room_channel.rb:3:in `subscribed'
+RoomChannel is transmitting the subscription confirmation
+RoomChannel is streaming from room:Z2lkOi8vY2hhdC1yb29tLXJhaWxzNi9Sb29tLzI
+Started POST "/room_messages" for ::1 at 2020-07-13 18:11:11 +0700
+Processing by RoomMessagesController#create as JS
+  Parameters: {"room_message"=>{"message"=>"llllll", "room_id"=>"2"}, "commit"=>"Send"}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mRoom Load (0.1ms)[0m  [1m[34mSELECT "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/room_messages_controller.rb:15:in `load_entities'
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/room_messages_controller.rb:5:in `create'
+  [1m[36mRoomMessage Create (0.3ms)[0m  [1m[32mINSERT INTO "room_messages" ("room_id", "user_id", "message", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["room_id", 2], ["user_id", 1], ["message", "llllll"], ["created_at", "2020-07-13 11:11:11.951762"], ["updated_at", "2020-07-13 11:11:11.951762"]]
+  ↳ app/controllers/room_messages_controller.rb:5:in `create'
+  [1m[35m (4.9ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/room_messages_controller.rb:5:in `create'
+[ActionCable] Broadcasting to room:Z2lkOi8vY2hhdC1yb29tLXJhaWxzNi9Sb29tLzI: #<RoomMessage id: 37, room_id: 2, user_id: 1, message: "llllll", created_at: "2020-07-13 11:11:11", updated_at: "2020-07-13 11:11:11">
+No template found for RoomMessagesController#create, rendering head :no_content
+Completed 204 No Content in 18ms (ActiveRecord: 5.5ms | Allocations: 6568)
+
+
+RoomChannel transmitting {"id"=>37, "room_id"=>2, "user_id"=>1, "message"=>"llllll", "created_at"=>"2020-07-13T11:11:11.951Z", "updated_at"=>"2020-07-13T11:11:11.951Z", "user_avatar_url"=>"https://gravatar.com/avatar/714601de5d25c8adc9616c254891fe7d.png"} (via streamed from room:Z2lkOi8vY2hhdC1yb29tLXJhaWxzNi9Sb29tLzI)
+Started GET "/rooms/2" for ::1 at 2020-07-13 18:11:13 +0700
+Processing by RoomsController#show as HTML
+  Parameters: {"id"=>"2"}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  [1m[36mRoom Load (0.2ms)[0m  [1m[34mSELECT "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/rooms_controller.rb:47:in `load_entities'
+  Rendering rooms/show.html.erb within layouts/application
+  [1m[36mRoom Load (0.2ms)[0m  [1m[34mSELECT "rooms".* FROM "rooms"[0m
+  ↳ app/views/rooms/_rooms.html.erb:7
+  Rendered rooms/_rooms.html.erb (Duration: 2.7ms | Allocations: 757)
+  [1m[36mRoomMessage Load (0.2ms)[0m  [1m[34mSELECT "room_messages".* FROM "room_messages" WHERE "room_messages"."room_id" = ?[0m  [["room_id", 2]]
+  ↳ app/views/rooms/show.html.erb:12
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ?[0m  [["id", 1]]
+  ↳ app/views/rooms/show.html.erb:12
+  Rendered rooms/show.html.erb within layouts/application (Duration: 23.8ms | Allocations: 7553)
+  Rendered shared/_navigation_bar.html.erb (Duration: 0.3ms | Allocations: 76)
+Completed 200 OK in 44ms (Views: 37.0ms | ActiveRecord: 0.8ms | Allocations: 15740)
+
+
+Finished "/cable/" [WebSocket] for ::1 at 2020-07-13 18:11:13 +0700
+RoomChannel stopped streaming from room:Z2lkOi8vY2hhdC1yb29tLXJhaWxzNi9Sb29tLzE
+Started GET "/cable" for ::1 at 2020-07-13 18:11:13 +0700
+Started GET "/cable/" [WebSocket] for ::1 at 2020-07-13 18:11:13 +0700
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/channels/application_cable/connection.rb:12:in `find_verified_user'
+Registered connection (Z2lkOi8vY2hhdC1yb29tLXJhaWxzNi9Vc2VyLzI)
+  [1m[36mRoom Load (0.1ms)[0m  [1m[34mSELECT "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/channels/room_channel.rb:3:in `subscribed'
+RoomChannel is transmitting the subscription confirmation
+RoomChannel is streaming from room:Z2lkOi8vY2hhdC1yb29tLXJhaWxzNi9Sb29tLzI
+Started POST "/room_messages" for ::1 at 2020-07-13 18:11:16 +0700
+Processing by RoomMessagesController#create as JS
+  Parameters: {"room_message"=>{"message"=>"gjytdtỷ", "room_id"=>"2"}, "commit"=>"Send"}
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  [1m[36mRoom Load (0.1ms)[0m  [1m[34mSELECT "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/room_messages_controller.rb:15:in `load_entities'
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/room_messages_controller.rb:5:in `create'
+  [1m[36mRoomMessage Create (0.3ms)[0m  [1m[32mINSERT INTO "room_messages" ("room_id", "user_id", "message", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["room_id", 2], ["user_id", 2], ["message", "gjytdtỷ"], ["created_at", "2020-07-13 11:11:16.488143"], ["updated_at", "2020-07-13 11:11:16.488143"]]
+  ↳ app/controllers/room_messages_controller.rb:5:in `create'
+  [1m[35m (6.4ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/room_messages_controller.rb:5:in `create'
+[ActionCable] Broadcasting to room:Z2lkOi8vY2hhdC1yb29tLXJhaWxzNi9Sb29tLzI: #<RoomMessage id: 38, room_id: 2, user_id: 2, message: "gjytdtỷ", created_at: "2020-07-13 11:11:16", updated_at: "2020-07-13 11:11:16">
+No template found for RoomMessagesController#create, rendering head :no_content
+RoomChannel transmitting {"id"=>38, "room_id"=>2, "user_id"=>2, "message"=>"gjytdtỷ", "created_at"=>"2020-07-13T11:11:16.488Z", "updated_at"=>"2020-07-13T11:11:16.488Z", "user_avatar_url"=>"https://gravatar.com/avatar/138eb670df1465d11e9599bf5df021ce.png"} (via streamed from room:Z2lkOi8vY2hhdC1yb29tLXJhaWxzNi9Sb29tLzI)
+RoomChannel transmitting {"id"=>38, "room_id"=>2, "user_id"=>2, "message"=>"gjytdtỷ", "created_at"=>"2020-07-13T11:11:16.488Z", "updated_at"=>"2020-07-13T11:11:16.488Z", "user_avatar_url"=>"https://gravatar.com/avatar/138eb670df1465d11e9599bf5df021ce.png"} (via streamed from room:Z2lkOi8vY2hhdC1yb29tLXJhaWxzNi9Sb29tLzI)
+Completed 204 No Content in 19ms (ActiveRecord: 7.0ms | Allocations: 6843)
+
+
+Started POST "/room_messages" for ::1 at 2020-07-13 18:11:21 +0700
+Processing by RoomMessagesController#create as JS
+  Parameters: {"room_message"=>{"message"=>"tdrhtrdhtrdh", "room_id"=>"2"}, "commit"=>"Send"}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mRoom Load (0.1ms)[0m  [1m[34mSELECT "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/room_messages_controller.rb:15:in `load_entities'
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/room_messages_controller.rb:5:in `create'
+  [1m[36mRoomMessage Create (0.4ms)[0m  [1m[32mINSERT INTO "room_messages" ("room_id", "user_id", "message", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["room_id", 2], ["user_id", 1], ["message", "tdrhtrdhtrdh"], ["created_at", "2020-07-13 11:11:21.187046"], ["updated_at", "2020-07-13 11:11:21.187046"]]
+  ↳ app/controllers/room_messages_controller.rb:5:in `create'
+  [1m[35m (6.3ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/room_messages_controller.rb:5:in `create'
+[ActionCable] Broadcasting to room:Z2lkOi8vY2hhdC1yb29tLXJhaWxzNi9Sb29tLzI: #<RoomMessage id: 39, room_id: 2, user_id: 1, message: "tdrhtrdhtrdh", created_at: "2020-07-13 11:11:21", updated_at: "2020-07-13 11:11:21">
+No template found for RoomMessagesController#create, rendering head :no_content
+RoomChannel transmitting {"id"=>39, "room_id"=>2, "user_id"=>1, "message"=>"tdrhtrdhtrdh", "created_at"=>"2020-07-13T11:11:21.187Z", "updated_at"=>"2020-07-13T11:11:21.187Z", "user_avatar_url"=>"https://gravatar.com/avatar/714601de5d25c8adc9616c254891fe7d.png"} (via streamed from room:Z2lkOi8vY2hhdC1yb29tLXJhaWxzNi9Sb29tLzI)
+RoomChannel transmitting {"id"=>39, "room_id"=>2, "user_id"=>1, "message"=>"tdrhtrdhtrdh", "created_at"=>"2020-07-13T11:11:21.187Z", "updated_at"=>"2020-07-13T11:11:21.187Z", "user_avatar_url"=>"https://gravatar.com/avatar/714601de5d25c8adc9616c254891fe7d.png"} (via streamed from room:Z2lkOi8vY2hhdC1yb29tLXJhaWxzNi9Sb29tLzI)
+Completed 204 No Content in 23ms (ActiveRecord: 7.1ms | Allocations: 6886)
+
+
