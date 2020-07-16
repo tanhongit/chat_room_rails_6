@@ -9,3 +9,6 @@ We are going to build the web application using:
 
 - Ruby: version ruby 2.7.1
 - Rails: version 6.0.3.2
+
+# DEMO Chat Room Application
+![Image](https://media.giphy.com/media/U4FeYRecUZls67UEXv/giphy.gif)
