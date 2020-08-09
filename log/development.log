@@ -5578,3 +5578,219 @@ RoomChannel is transmitting the subscription confirmation
 RoomChannel is streaming from room:Z2lkOi8vY2hhdC1yb29tLXJhaWxzNi9Sb29tLzE
 Finished "/cable/" [WebSocket] for ::1 at 2020-07-19 21:07:32 +0700
 RoomChannel stopped streaming from room:Z2lkOi8vY2hhdC1yb29tLXJhaWxzNi9Sb29tLzE
+Started GET "/" for ::1 at 2020-07-30 11:21:53 +0700
+  [1m[35m (2.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by RoomsController#index as HTML
+Completed 401 Unauthorized in 10ms (ActiveRecord: 0.0ms | Allocations: 1214)
+
+
+Started GET "/users/sign_in" for ::1 at 2020-07-30 11:21:53 +0700
+Processing by Devise::SessionsController#new as HTML
+  Rendering devise/sessions/new.html.erb within layouts/application
+  Rendered devise/shared/_links.html.erb (Duration: 1.2ms | Allocations: 592)
+  Rendered devise/sessions/new.html.erb within layouts/application (Duration: 50.3ms | Allocations: 15824)
+  Rendered shared/_navigation_bar.html.erb (Duration: 1.2ms | Allocations: 246)
+Completed 200 OK in 3437ms (Views: 3421.2ms | ActiveRecord: 1.0ms | Allocations: 82878)
+
+
+Started POST "/users/sign_in" for ::1 at 2020-07-30 11:22:03 +0700
+Processing by Devise::SessionsController#create as HTML
+  Parameters: {"authenticity_token"=>"awSAQ2CPq/791M7EfVf4RWluo5fKh0JCfkr3WEGS92b/mbSluo9wbWoWq7PyqS3Dyn2691JB6nAuplFmuv1bJA==", "user"=>{"email"=>"phuongtan12357nguyen@gmail.com", "password"=>"[FILTERED]", "remember_me"=>"0"}, "commit"=>"Log in"}
+  [1m[36mUser Load (0.8ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["email", "phuongtan12357nguyen@gmail.com"], ["LIMIT", 1]]
+Completed 401 Unauthorized in 234ms (ActiveRecord: 0.8ms | Allocations: 2501)
+
+
+Processing by Devise::SessionsController#new as HTML
+  Parameters: {"authenticity_token"=>"awSAQ2CPq/791M7EfVf4RWluo5fKh0JCfkr3WEGS92b/mbSluo9wbWoWq7PyqS3Dyn2691JB6nAuplFmuv1bJA==", "user"=>{"email"=>"phuongtan12357nguyen@gmail.com", "password"=>"[FILTERED]", "remember_me"=>"0"}, "commit"=>"Log in"}
+  Rendering devise/sessions/new.html.erb within layouts/application
+  Rendered devise/shared/_links.html.erb (Duration: 0.3ms | Allocations: 131)
+  Rendered devise/sessions/new.html.erb within layouts/application (Duration: 13.6ms | Allocations: 8633)
+  Rendered shared/_navigation_bar.html.erb (Duration: 0.0ms | Allocations: 17)
+Completed 200 OK in 246ms (Views: 20.3ms | ActiveRecord: 0.0ms | Allocations: 15206)
+
+
+Started POST "/users/sign_in" for ::1 at 2020-07-30 11:22:11 +0700
+Processing by Devise::SessionsController#create as HTML
+  Parameters: {"authenticity_token"=>"nbk+EUiXsvm8+OL7aYr3FufFEIW5ofW8+ngriuJJZhQJJAr3kpdpais6h4zmdCKQRNYJ5SFnXY6qlI20GSbKVg==", "user"=>{"email"=>"phuongtan12357nguyen@gmail.com", "password"=>"[FILTERED]", "remember_me"=>"0"}, "commit"=>"Log in"}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["email", "phuongtan12357nguyen@gmail.com"], ["LIMIT", 1]]
+Redirected to http://localhost:3000/
+Completed 302 Found in 239ms (ActiveRecord: 0.3ms | Allocations: 4720)
+
+
+Started GET "/" for ::1 at 2020-07-30 11:22:11 +0700
+Processing by RoomsController#index as HTML
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  Rendering rooms/index.html.erb within layouts/application
+  [1m[36mRoom Load (0.4ms)[0m  [1m[34mSELECT "rooms".* FROM "rooms"[0m
+  ↳ app/views/rooms/_rooms.html.erb:7
+  Rendered rooms/_rooms.html.erb (Duration: 7.0ms | Allocations: 3232)
+  Rendered rooms/index.html.erb within layouts/application (Duration: 7.9ms | Allocations: 3538)
+  Rendered shared/_navigation_bar.html.erb (Duration: 0.3ms | Allocations: 83)
+Completed 200 OK in 26ms (Views: 16.5ms | ActiveRecord: 1.2ms | Allocations: 13112)
+
+
+Started GET "/rooms/1" for ::1 at 2020-07-30 11:22:13 +0700
+Processing by RoomsController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mRoom Load (0.3ms)[0m  [1m[34mSELECT "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/rooms_controller.rb:47:in `load_entities'
+  Rendering rooms/show.html.erb within layouts/application
+  [1m[36mRoom Load (0.1ms)[0m  [1m[34mSELECT "rooms".* FROM "rooms"[0m
+  ↳ app/views/rooms/_rooms.html.erb:7
+  Rendered rooms/_rooms.html.erb (Duration: 1.8ms | Allocations: 763)
+  [1m[36mRoomMessage Load (0.7ms)[0m  [1m[34mSELECT "room_messages".* FROM "room_messages" WHERE "room_messages"."room_id" = ?[0m  [["room_id", 1]]
+  ↳ app/views/rooms/show.html.erb:12
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" IN (?, ?, ?)[0m  [["id", 1], ["id", 2], ["id", 3]]
+  ↳ app/views/rooms/show.html.erb:12
+  Rendered rooms/show.html.erb within layouts/application (Duration: 23.0ms | Allocations: 11250)
+  Rendered shared/_navigation_bar.html.erb (Duration: 0.2ms | Allocations: 79)
+Completed 200 OK in 70ms (Views: 32.7ms | ActiveRecord: 2.4ms | Allocations: 26974)
+
+
+Started GET "/cable" for ::1 at 2020-07-30 11:22:13 +0700
+Started GET "/cable/" [WebSocket] for ::1 at 2020-07-30 11:22:13 +0700
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/channels/application_cable/connection.rb:12:in `find_verified_user'
+Registered connection (Z2lkOi8vY2hhdC1yb29tLXJhaWxzNi9Vc2VyLzE)
+  [1m[36mRoom Load (0.2ms)[0m  [1m[34mSELECT "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/channels/room_channel.rb:3:in `subscribed'
+RoomChannel is transmitting the subscription confirmation
+RoomChannel is streaming from room:Z2lkOi8vY2hhdC1yb29tLXJhaWxzNi9Sb29tLzE
+Started POST "/room_messages" for ::1 at 2020-07-30 11:22:17 +0700
+Processing by RoomMessagesController#create as JS
+  Parameters: {"room_message"=>{"message"=>"hi", "room_id"=>"1"}, "commit"=>"Send"}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mRoom Load (0.1ms)[0m  [1m[34mSELECT "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/room_messages_controller.rb:15:in `load_entities'
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/room_messages_controller.rb:5:in `create'
+  [1m[36mRoomMessage Create (0.9ms)[0m  [1m[32mINSERT INTO "room_messages" ("room_id", "user_id", "message", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["room_id", 1], ["user_id", 1], ["message", "hi"], ["created_at", "2020-07-30 04:22:17.379806"], ["updated_at", "2020-07-30 04:22:17.379806"]]
+  ↳ app/controllers/room_messages_controller.rb:5:in `create'
+  [1m[35m (4.9ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/room_messages_controller.rb:5:in `create'
+[ActionCable] Broadcasting to room:Z2lkOi8vY2hhdC1yb29tLXJhaWxzNi9Sb29tLzE: #<RoomMessage id: 49, room_id: 1, user_id: 1, message: "hi", created_at: "2020-07-30 04:22:17", updated_at: "2020-07-30 04:22:17">
+No template found for RoomMessagesController#create, rendering head :no_content
+Completed 204 No Content in 26ms (ActiveRecord: 6.1ms | Allocations: 11119)
+
+
+RoomChannel transmitting {"id"=>49, "room_id"=>1, "user_id"=>1, "message"=>"hi", "created_at"=>"2020-07-30T04:22:17.379Z", "updated_at"=>"2020-07-30T04:22:17.379Z", "user_avatar_url"=>"https://gravatar.com/avatar/714601de5d25c8adc9616c254891fe7d.png"} (via streamed from room:Z2lkOi8vY2hhdC1yb29tLXJhaWxzNi9Sb29tLzE)
+Started GET "/rooms/2" for ::1 at 2020-07-30 11:23:26 +0700
+Processing by RoomsController#show as HTML
+  Parameters: {"id"=>"2"}
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mRoom Load (0.1ms)[0m  [1m[34mSELECT "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/rooms_controller.rb:47:in `load_entities'
+  Rendering rooms/show.html.erb within layouts/application
+  [1m[36mRoom Load (0.1ms)[0m  [1m[34mSELECT "rooms".* FROM "rooms"[0m
+  ↳ app/views/rooms/_rooms.html.erb:7
+  Rendered rooms/_rooms.html.erb (Duration: 1.2ms | Allocations: 757)
+  [1m[36mRoomMessage Load (0.1ms)[0m  [1m[34mSELECT "room_messages".* FROM "room_messages" WHERE "room_messages"."room_id" = ?[0m  [["room_id", 2]]
+  ↳ app/views/rooms/show.html.erb:12
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" IN (?, ?)[0m  [["id", 1], ["id", 2]]
+  ↳ app/views/rooms/show.html.erb:12
+  Rendered rooms/show.html.erb within layouts/application (Duration: 13.3ms | Allocations: 7749)
+  Rendered shared/_navigation_bar.html.erb (Duration: 0.3ms | Allocations: 77)
+Completed 200 OK in 31ms (Views: 25.7ms | ActiveRecord: 0.6ms | Allocations: 16496)
+
+
+Finished "/cable/" [WebSocket] for ::1 at 2020-07-30 11:23:26 +0700
+RoomChannel stopped streaming from room:Z2lkOi8vY2hhdC1yb29tLXJhaWxzNi9Sb29tLzE
+Started GET "/cable" for ::1 at 2020-07-30 11:23:27 +0700
+Started GET "/cable/" [WebSocket] for ::1 at 2020-07-30 11:23:27 +0700
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/channels/application_cable/connection.rb:12:in `find_verified_user'
+Registered connection (Z2lkOi8vY2hhdC1yb29tLXJhaWxzNi9Vc2VyLzE)
+  [1m[36mRoom Load (0.1ms)[0m  [1m[34mSELECT "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/channels/room_channel.rb:3:in `subscribed'
+RoomChannel is transmitting the subscription confirmation
+RoomChannel is streaming from room:Z2lkOi8vY2hhdC1yb29tLXJhaWxzNi9Sb29tLzI
+Started GET "/rooms/1" for ::1 at 2020-07-30 11:23:27 +0700
+Processing by RoomsController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mRoom Load (0.1ms)[0m  [1m[34mSELECT "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/rooms_controller.rb:47:in `load_entities'
+  Rendering rooms/show.html.erb within layouts/application
+  [1m[36mRoom Load (0.1ms)[0m  [1m[34mSELECT "rooms".* FROM "rooms"[0m
+  ↳ app/views/rooms/_rooms.html.erb:7
+  Rendered rooms/_rooms.html.erb (Duration: 1.8ms | Allocations: 757)
+  [1m[36mRoomMessage Load (0.3ms)[0m  [1m[34mSELECT "room_messages".* FROM "room_messages" WHERE "room_messages"."room_id" = ?[0m  [["room_id", 1]]
+  ↳ app/views/rooms/show.html.erb:12
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" IN (?, ?, ?)[0m  [["id", 1], ["id", 2], ["id", 3]]
+  ↳ app/views/rooms/show.html.erb:12
+  Rendered rooms/show.html.erb within layouts/application (Duration: 16.2ms | Allocations: 9775)
+  Rendered shared/_navigation_bar.html.erb (Duration: 0.2ms | Allocations: 77)
+Completed 200 OK in 31ms (Views: 25.8ms | ActiveRecord: 0.9ms | Allocations: 18518)
+
+
+Finished "/cable/" [WebSocket] for ::1 at 2020-07-30 11:23:28 +0700
+RoomChannel stopped streaming from room:Z2lkOi8vY2hhdC1yb29tLXJhaWxzNi9Sb29tLzI
+Started GET "/cable" for ::1 at 2020-07-30 11:23:28 +0700
+Started GET "/cable/" [WebSocket] for ::1 at 2020-07-30 11:23:28 +0700
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/channels/application_cable/connection.rb:12:in `find_verified_user'
+Registered connection (Z2lkOi8vY2hhdC1yb29tLXJhaWxzNi9Vc2VyLzE)
+  [1m[36mRoom Load (0.2ms)[0m  [1m[34mSELECT "rooms".* FROM "rooms" WHERE "rooms"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/channels/room_channel.rb:3:in `subscribed'
+RoomChannel is transmitting the subscription confirmation
+RoomChannel is streaming from room:Z2lkOi8vY2hhdC1yb29tLXJhaWxzNi9Sb29tLzE
+Finished "/cable/" [WebSocket] for ::1 at 2020-07-30 11:23:30 +0700
+RoomChannel stopped streaming from room:Z2lkOi8vY2hhdC1yb29tLXJhaWxzNi9Sb29tLzE
+Started GET "/" for ::1 at 2020-08-04 21:52:07 +0700
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by RoomsController#index as HTML
+Completed 401 Unauthorized in 11ms (ActiveRecord: 0.0ms | Allocations: 1194)
+
+
+Started GET "/users/sign_in" for ::1 at 2020-08-04 21:52:07 +0700
+Processing by Devise::SessionsController#new as HTML
+  Rendering devise/sessions/new.html.erb within layouts/application
+  Rendered devise/shared/_links.html.erb (Duration: 1.1ms | Allocations: 596)
+  Rendered devise/sessions/new.html.erb within layouts/application (Duration: 38.6ms | Allocations: 15828)
+  Rendered shared/_navigation_bar.html.erb (Duration: 0.7ms | Allocations: 241)
+Completed 200 OK in 79ms (Views: 64.5ms | ActiveRecord: 0.8ms | Allocations: 32286)
+
+
+  [1m[35m (8.4ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL PRIMARY KEY)[0m
+  [1m[35m (6.9ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" character varying NOT NULL PRIMARY KEY, "value" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (0.4ms)[0m  [1m[34mSELECT pg_try_advisory_lock(4066109514181794870)[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to DeviseCreateUsers (20200709122016)
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (8.4ms)[0m  [1m[35mCREATE TABLE "users" ("id" bigserial primary key, "email" character varying DEFAULT '' NOT NULL, "encrypted_password" character varying DEFAULT '' NOT NULL, "reset_password_token" character varying, "reset_password_sent_at" timestamp, "remember_created_at" timestamp, "username" character varying NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (2.5ms)[0m  [1m[35mCREATE UNIQUE INDEX  "index_users_on_username" ON "users"  ("username")[0m
+  [1m[35m (3.0ms)[0m  [1m[35mCREATE UNIQUE INDEX  "index_users_on_email" ON "users"  ("email")[0m
+  [1m[35m (2.3ms)[0m  [1m[35mCREATE UNIQUE INDEX  "index_users_on_reset_password_token" ON "users"  ("reset_password_token")[0m
+  [1m[36mprimary::SchemaMigration Create (0.5ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20200709122016"]]
+  [1m[35m (1.2ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreateRooms (20200709122130)
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (5.3ms)[0m  [1m[35mCREATE TABLE "rooms" ("id" bigserial primary key, "name" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (2.3ms)[0m  [1m[35mCREATE UNIQUE INDEX  "index_rooms_on_name" ON "rooms"  ("name")[0m
+  [1m[36mprimary::SchemaMigration Create (0.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20200709122130"]]
+  [1m[35m (1.0ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreateRoomMessages (20200709122137)
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (6.7ms)[0m  [1m[35mCREATE TABLE "room_messages" ("id" bigserial primary key, "room_id" bigint NOT NULL, "user_id" bigint NOT NULL, "message" text, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, CONSTRAINT "fk_rails_8ed44f6e34"
+FOREIGN KEY ("room_id")
+  REFERENCES "rooms" ("id")
+, CONSTRAINT "fk_rails_76bc7b974e"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+)[0m
+  [1m[35m (2.3ms)[0m  [1m[35mCREATE  INDEX  "index_room_messages_on_room_id" ON "room_messages"  ("room_id")[0m
+  [1m[35m (2.4ms)[0m  [1m[35mCREATE  INDEX  "index_room_messages_on_user_id" ON "room_messages"  ("user_id")[0m
+  [1m[36mprimary::SchemaMigration Create (0.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20200709122137"]]
+  [1m[35m (1.1ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.4ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "environment"], ["value", "development"], ["created_at", "2020-08-09 20:02:42.150859"], ["updated_at", "2020-08-09 20:02:42.150859"]]
+  [1m[35m (0.9ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT pg_advisory_unlock(4066109514181794870)[0m
+  [1m[35m (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m

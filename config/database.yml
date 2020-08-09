@@ -5,21 +5,28 @@
 #   gem 'sqlite3'
 #
 default: &default
-  adapter: sqlite3
+  adapter: postgresql
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   timeout: 5000
+  username: chat_room_rails_6
+  password: 1234
+  host: localhost
+
+# sudo -u postgres psql
+# create user "chat_room_rails_6" with password '1234';  
+# create database "chat_room_rails_6" owner "chat_room_rails_6"; 
 
 development:
   <<: *default
-  database: db/development.sqlite3
+  database: chat_room_rails_6
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: db/test.sqlite3
+  database: chat_room_rails_6_test
 
 production:
   <<: *default
-  database: db/production.sqlite3
+  database: chat_room_rails_6_production
