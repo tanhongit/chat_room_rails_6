@@ -82,4 +82,4 @@ $ rails db:migrate
 $ rails s
 ```
 
-And nơ go to  http://localhost:3000/
+And now go to  http://localhost:3000/
