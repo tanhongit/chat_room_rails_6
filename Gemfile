@@ -84,3 +84,4 @@ gem "simple_form"
 gem "devise", "~> 4.1"
 gem 'redis'
 gem 'sprockets-rails'
+gem 'bootstrap-sass'

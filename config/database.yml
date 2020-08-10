@@ -8,8 +8,8 @@ default: &default
   adapter: postgresql
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   timeout: 5000
-  username: chat_room_rails_6
-  password: 1234
+  username: postgres
+  password: 1974
   host: localhost
 
 # sudo -u postgres psql
