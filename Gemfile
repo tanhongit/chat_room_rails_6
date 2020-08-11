@@ -73,7 +73,7 @@ gem "figaro"
 
 # https://viblo.asia/p/phan-trang-trong-rails-su-dung-gem-kaminari-va-tao-select-limit-load-voi-gem-ransack-lA7GKwOYGKZQ
 # caif bootstrap cho phan trang
-# gem 'bootstrap', '~> 4.3.0'
+gem 'bootstrap', '~> 4.3.0'
 # Bootstrap JavaScript phụ thuộc vào jQuery. Nếu bạn đang sử dụng Rails 5.1+, hãy thêm jquery-railsđá quý vào Gemfile của bạn:
 gem 'jquery-rails'
 
