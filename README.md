@@ -85,3 +85,7 @@ $ rails s
 ```
 
 And now go to  http://localhost:3000/
+
+<p align="center">
+     <img src="https://img.shields.io/packagist/l/doctrine/orm.svg" data-origin="https://img.shields.io/packagist/l/doctrine/orm.svg" alt="license">
+</p>
