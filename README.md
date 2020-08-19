@@ -77,8 +77,28 @@ You must change the username, password and database name accordingly!
 ```
 $ rails db:migrate
 ```
+### 6. Install redis
 
-### 6. run server
+We are going to use the redis adapter which is a safe option for production environments unlike the async one.
+
+You first must install [redis](https://redis.io/) on your system.
+
+To install it on Ubuntu you just have to execute the following commands in your terminal:
+
+```
+$ sudo apt update
+$ sudo apt install redis-server
+```
+
+To check that installation is successful, in your terminal make sure you get a PONG:
+
+```
+$ redis-cli
+127.0.0.1:6379> ping
+PONG
+```
+
+### 7. run server
 
 ```
 $ rails s
