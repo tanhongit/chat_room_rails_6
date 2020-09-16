@@ -90,6 +90,10 @@ $ sudo apt update
 $ sudo apt install redis-server
 ```
 
+--------------------------------------------------------------------
+
+Install redis for Windows. Go to https://github.com/MicrosoftArchive/redis/
+
 To check that installation is successful, in your terminal make sure you get a PONG:
 
 ```
