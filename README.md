@@ -98,6 +98,12 @@ $ sudo apt install redis-server
 
 --------------------------------------------------------------------
 
+Now open terminal and run:
+
+```
+redis-server
+```
+
 To check that installation is successful, in your terminal make sure you get a PONG:
 
 ```
