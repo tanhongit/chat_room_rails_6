@@ -1,3 +1,5 @@
 Error start redis for windows : "Creating Server TCP listening socket *:6379: bind: No such file or directory"
 https://stackoverflow.com/questions/31769097/cant-bind-tcp-listener-6379-using-redis-on-windows
 => Now service is normally.I run redis-cli.exe in the same window,and it connect correctly.Then I typed shutdown,the service is over.Reopen a command windows,type redis-server
+
+tutorial: https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets
