@@ -90,6 +90,14 @@ $ sudo apt update
 $ sudo apt install redis-server
 ```
 
+--------------------------------------------------------------------
+
+- Install redis for Windows 8.1 and previous versions. Go to https://redislabs.com/blog/redis-on-windows-8-1-and-previous-versions/
+
+- Install redis for Windows 10: https://redislabs.com/blog/redis-on-windows-10/
+
+--------------------------------------------------------------------
+
 To check that installation is successful, in your terminal make sure you get a PONG:
 
 ```
